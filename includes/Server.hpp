@@ -67,27 +67,23 @@ class Server
         void AddFds(pollfd newFd);
         void set_username(std::string& username, int fd);
         void set_nickname(std::string cmd, int fd);
-        //---------------//Remove Methods
+
+        /* ******************** Remove Methods ******************** */
         void RemoveClient(int fd);
         void RemoveChannel(std::string name);
         void RemoveFds(int fd);
         void RmChannels(int fd);
-        //---------------//Send Methods
-        void senderror(int code, std::string clientname, int fd, std::string msg);
-        void senderror(int code, std::string clientname, std::string channelname, int fd, std::string msg);
-        void 		_sendResponse(std::string response, int fd);
-        //---------------//Close and Signal Methods
+
+        /* ******************** Close and Signal Methods ******************** */
         static void SignalHandler(int signum);
         void close_fds();
-        //---------------//Server Methods
+
+        /* ******************** Server Methods ******************** */
         void init(int port, std::string pass);
         void accept_new_client();
         void set_sever_socket();
         void reciveNewData(int fd);
-        //---------------//Parsing Methods
-        std::vector<std::string> split_recivedBuffer(std::string str);
-        std::vector<std::string> split_cmd(std::string &str);
-        void parse_exec_cmd(std::string &cmd, int fd);
+
         //---------------//Authentification Methods
         bool BypassForBot(std::string cmd, int fd);
         bool notregistered(int fd);
@@ -99,5 +95,10 @@ class Server
 
 	    void	ft_display(void);
 };
+
+//---------------//Parsing Methods
+std::vector<std::string> split_recivedBuffer(std::string str);
+std::vector<std::string> split_cmd(std::string &str);
+void parse_exec_cmd(std::string &cmd, int fd);
 
 #endif

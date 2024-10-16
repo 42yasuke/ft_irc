@@ -6,7 +6,9 @@ RM = rm -f
 
 INC = -I includes/
 
-CPP_FILES =	
+CPP_FILES =	main.cpp \
+			utils.cpp \
+			Server/Server.cpp Server/Parse.cpp 
 
 OBJ = $(CPP_FILES:.cpp=.o)
 DEP = $(CPP_FILES:.cpp=.d)

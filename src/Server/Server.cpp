@@ -148,34 +148,8 @@ void    Server::RmChannels(int fd){
 		}
 	}
 }
-//---------------//Remove Methods
-//---------------//Send Methods
-void Server::senderror(int code, std::string clientname, int fd, std::string msg)
-{
-	std::stringstream ss;
-	ss << ":localhost " << code << " " << clientname << msg;
-	std::string resp = ss.str();
-	if(send(fd, resp.c_str(), resp.size(),0) == -1)
-		std::cerr << "send() faild" << std::endl;
-}
 
-void Server::senderror(int code, std::string clientname, std::string channelname, int fd, std::string msg)
-{
-	std::stringstream ss;
-	ss << ":localhost " << code << " " << clientname << " " << channelname << msg;
-	std::string resp = ss.str();
-	if(send(fd, resp.c_str(), resp.size(),0) == -1)
-		std::cerr << "send() faild" << std::endl;
-}
-
-void Server::_sendResponse(std::string response, int fd)
-{
-	if(send(fd, response.c_str(), response.size(), 0) == -1)
-		std::cerr << "Response send() faild" << std::endl;
-}
-//---------------//Send Methods
-//---------------//Close and Signal Methods
-
+/* ******************** Close and Signal Methods ******************** */
 void Server::SignalHandler(int signum)
 {
 	(void)signum;
@@ -193,8 +167,8 @@ void	Server::close_fds(){
 		close(server_fdsocket);
 	}
 }
-//---------------//Close and Signal Methods
-//---------------//Server Methods
+
+/* ******************** Server Methods ******************** */
 void Server::init(int port, std::string pass)
 {
 	this->password = pass;
@@ -286,11 +260,24 @@ void Server::reciveNewData(int fd)
 			return;
 		cmd = split_recivedBuffer(cli->getBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
-			this->parse_exec_cmd(cmd[i], fd);
+			parse_exec_cmd(cmd[i], fd);
 		if(GetClient(fd))
 			GetClient(fd)->clearBuffer();
 	}
 }
+
+/* ******************** Parsing Methods ******************** */
+
+
+bool Server::notregistered(int fd)
+{
+	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() || GetClient(fd)->GetUserName().empty() || GetClient(fd)->GetNickName() == "*"  || !GetClient(fd)->GetLogedIn())
+		return false;
+	return true;
+}
+
+
+//---------------//Parsing Methods
 
 
 
