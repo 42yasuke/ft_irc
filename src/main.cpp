@@ -20,7 +20,7 @@ int main(int ac, char** av)
             std::cout << "invalid Port number / Password!" << std::endl;
             return 1;
         }
-		ser.init(std::atoi(av[1]), av[2]);
+		ser.startServer(std::atoi(av[1]), av[2]);
 	}
 	catch(const std::exception& e)
 	{

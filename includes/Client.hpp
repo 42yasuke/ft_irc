@@ -23,7 +23,7 @@ public:
 	Client(Client const &src);
 	Client &operator=(Client const &src);
 	//---------------//Getters
-	int GetFd();
+	int GetFd(void);
 	bool getRegistered();
 	bool GetInviteChannel(std::string &ChName);
 	std::string GetNickName();

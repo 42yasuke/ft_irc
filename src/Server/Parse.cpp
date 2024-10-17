@@ -1,79 +1,97 @@
 #include "Server.hpp"
 
-std::vector<std::string> split_recivedBuffer(std::string str)
+std::vector<std::string> Server::split_recivedBuffer(std::string str)
 {
 	std::vector<std::string> vec;
 	std::istringstream stm(str);
 	std::string line;
-	while(std::getline(stm, line))
+	while (std::getline(stm, line))
 		vec.push_back(line);
-	return vec;
+	return (vec);
 }
 
-std::vector<std::string> split_cmd(std::string& cmd)
+std::vector<std::string> Server::split_cmd(std::string &cmd)
 {
 	std::vector<std::string> vec;
 	std::istringstream stm(cmd);
 	std::string token;
-	while(stm >> token)
+	while (stm >> token)
 	{
 		vec.push_back(token);
 		token.clear();
 	}
-	return vec;
+	return (vec);
 }
 
-std::string get_cmd_type(std::string& cmd)
+int	get_cmd_type(std::string &cmd, bool registered)
 {
 	std::istringstream stm(cmd);
 	std::string token;
-	return (stm >> token, token);
+	stm >> token;
+	for (size_t i = 0; i < token.size(); i++)
+		token[i] = std::tolower(token[i]);
+	if (token == "pass")
+		return (PASS);
+	if (token == "nick")
+		return (NICK);
+	if (token == "user")
+		return (USER);
+	if (token == "quit")
+		return (QUIT);
+	if (!registered)
+		return (NOTREGISTERED);
+	if (token == "kick")
+		return (KICK);
+	if (token == "join")
+		return (JOIN);
+	if (token == "topic")
+		return (TOPIC);
+	if (token == "mode")
+		return (MODE);
+	if (token == "part")
+		return (PART);
+	if (token == "invite")
+		return (INVITE);
+	if (token == "privmsg")
+		return (PRIVMSG);
+	return (CMDNOTFOUND);
 }
 
 bool Server::notregistered(int fd)
 {
-	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() || GetClient(fd)->GetUserName().empty() || GetClient(fd)->GetNickName() == "*"  || !GetClient(fd)->GetLogedIn())
+	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() || GetClient(fd)->GetUserName().empty() \
+	|| GetClient(fd)->GetNickName() == "*"  || !GetClient(fd)->GetLogedIn())
 		return false;
 	return true;
 }
 
-void parse_exec_cmd(std::string &cmd, int fd)
+void	Server::parse_exec_cmd(std::string &cmd, int fd)
 {
-	if(cmd.empty())
-		return ;
-	std::string cmd_type = get_cmd_type(cmd);
 	size_t found = cmd.find_first_not_of(" \t\v");
 	if(found != std::string::npos)
 		cmd = cmd.substr(found);
-	if(!cmd_type.empty() && (cmd_type == "BONG" || cmd_type == "bong")) /*faire un pointeur sur fonction qui va appeller le bonne focntion*/
-		return;
-    if(!cmd_type.empty() && (cmd_type == "PASS" || cmd_type == "pass"))
-        client_authen(fd, cmd);
-	else if (!cmd_type.empty() && (cmd_type == "NICK" || cmd_type == "nick"))
-		set_nickname(cmd,fd);
-	else if(!cmd_type.empty() && (cmd_type == "USER" || cmd_type == "user"))
-		set_username(cmd, fd);
-	else if (!cmd_type.empty() && (cmd_type == "QUIT" || cmd_type == "quit"))
-		QUIT(cmd,fd);
-	else if(notregistered(fd))
-	{
-		if (!cmd_type.empty() && (cmd_type == "KICK" || cmd_type == "kick"))
-			KICK(cmd, fd);
-		else if (!cmd_type.empty() && (cmd_type == "JOIN" || cmd_type == "join"))
-			JOIN(cmd, fd);
-		else if (!cmd_type.empty() && (cmd_type == "TOPIC" || cmd_type == "topic"))
-			Topic(cmd, fd);
-		else if (!cmd_type.empty() && (cmd_type == "MODE" || cmd_type == "mode"))
-			mode_command(cmd, fd);
-		else if (!cmd_type.empty() && (cmd_type == "PART" || cmd_type == "part"))
-			PART(cmd, fd);
-		else if (!cmd_type.empty() && (cmd_type == "PRIVMSG" || cmd_type == "privmsg"))
-			PRIVMSG(cmd, fd);
-		else if (!cmd_type.empty() && (cmd_type == "INVITE" || cmd_type == "invite"))
-			Invite(cmd,fd);
-		else if (!cmd_type.empty())
-			_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(),cmd_type),fd);
-	}
-	else if (!notregistered(fd))
+	else
+		return ;
+	int cmd_type = get_cmd_type(cmd, notregistered(fd));
+	if (cmd_type == CMDNOTFOUND)
+		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(),cmd_type),fd);
+	else if (cmd_type == NOTREGISTERED)
 		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
+	else
+	{
+		void (Server::*cmd[])(int, std::string) = 
+		{
+			&Server::pass_cmd,
+			&Server::nick_cmd,
+			&Server::set_username,
+			&Server::KICK,
+			&Server::JOIN,
+			&Server::Topic,
+			&Server::mode_command,
+			&Server::PART,
+			&Server::PRIVMSG,
+			&Server::Invite,
+		};
+		this->cmd[cmd_type](fd, cmd);
+	}
 }
