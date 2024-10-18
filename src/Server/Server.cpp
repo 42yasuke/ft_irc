@@ -8,6 +8,13 @@ Server::Server()
 
 Server::~Server()
 {
+	for(size_t i = 0; i < clients.size(); i++)
+		delete clients[i];
+	if (server_fdsocket != -1)
+	{
+		std::cout << RED << "Server <" << server_fdsocket << "> Disconnected" << WHI << std::endl;
+		close(server_fdsocket);
+	}
 }
 
 Server::Server(Server const &src)
@@ -37,14 +44,7 @@ void Server::SignalHandler(int signum)
 }
 
 void	Server::close_fds(){
-	for(size_t i = 0; i < clients.size(); i++){
-		std::cout << RED << "Client <" << clients[i].GetFd() << "> Disconnected" << WHI << std::endl;
-		close(clients[i].GetFd());
-	}
-	if (server_fdsocket != -1){	
-		std::cout << RED << "Server <" << server_fdsocket << "> Disconnected" << WHI << std::endl;
-		close(server_fdsocket);
-	}
+	
 }
 
 /* ******************** Server Methods ******************** */
@@ -71,24 +71,31 @@ void Server::startServer(int port, std::string pass)
 			}
 		}
 	}
-	close_fds();
 }
 
 void Server::accept_new_client()
 {
-	Client cli;
 	memset(&cliadd, 0, sizeof(cliadd));
 	socklen_t len = sizeof(cliadd);
 	int incofd = accept(server_fdsocket, (sockaddr *)&(cliadd), &len);
 	if (incofd == -1)
-		{std::cout << "accept() failed" << std::endl; return;}
+	{
+		std::cout << "accept() failed" << std::endl; return;}
 	if (fcntl(incofd, F_SETFL, O_NONBLOCK) == -1)
 		{std::cout << "fcntl() failed" << std::endl; return;}
 	new_cli.fd = incofd;
 	new_cli.events = POLLIN;
 	new_cli.revents = 0;
-	cli.SetFd(incofd);
-	cli.setIpAdd(inet_ntoa((cliadd.sin_addr)));
+	Client *cli = new Client();
+	if (!cli)
+	{
+		std::cerr << "new Client() failled!!!" << std::endl;
+		close(incofd);
+		delete this;
+		exit (EXIT_FAILURE);
+	}
+	cli->SetFd(incofd);
+	cli->setIpAdd(inet_ntoa((cliadd.sin_addr)));
 	clients.push_back(cli);
 	fds.push_back(new_cli);
 	std::cout << GRE << "Client <" << incofd << "> Connected" << WHI << std::endl;

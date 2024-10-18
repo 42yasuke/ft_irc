@@ -1,10 +1,16 @@
 #ifndef UTILS_HPP
-#define UTILS_HPP
+# define UTILS_HPP
 
-#include <iostream>
-#include <string>
+# include <iostream>
+# include <string>
 
-static bool isPortValid(std::string port);
-static bool isPasswordValid(std::string pw);
+# include "Server.hpp"
+
+class Server;
+
+bool	isPortValid(std::string port);
+bool	isPasswordValid(std::string pw);
+void	*getServ(void *p);
+void	ft_error(std::string msg);
 
 #endif

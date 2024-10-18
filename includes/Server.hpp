@@ -38,10 +38,14 @@
 # define CMDNOTFOUND 11
 # define NOTREGISTERED 12
 
+# define PORT_AUTORISAT_MIN 1024
+# define PORT_AUTORISAT_MAX 65535
+
 # define MAX_CHAR 9
 
 # include "Channel.hpp"
 # include "Client.hpp"
+# include "Utils.hpp"
 
 class	Client;
 class	Channel;
@@ -53,7 +57,7 @@ class Server
 	int server_fdsocket;
 	static bool Signal;
 	std::string password;
-	std::vector<Client> clients;
+	std::vector<Client*> clients;
 	std::vector<Channel> channels;
 	std::vector<struct pollfd> fds;
 	struct sockaddr_in add;
