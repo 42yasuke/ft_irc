@@ -43,13 +43,10 @@ void Server::nick_cmd(int fd, std::string cmd)
 		Client *cli = GetClient(fd);
 		if(cli && cli->getRegistered())
 		{
-			std::string oldnick = cli->GetNickName(); //c bizarre le poto travail avec des copies au lieu de malloc
+
+			std::string oldnick = cli->GetNickName(); 
 			cli->SetNickname(cmd);
-			for(size_t i = 0; i < channels.size(); i++){
-				Client *cl = channels[i].GetClientInChannel(oldnick);
-				if(cl)
-					cl->SetNickname(cmd);
-			}
+			//faut prevenir tout le monde du changement de blaze
 			if(!oldnick.empty() && oldnick != cmd)
 			{
 				if(oldnick == "*" && !cli->GetUserName().empty())

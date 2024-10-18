@@ -9,7 +9,8 @@ INC = -I includes/
 CPP_FILES =	main.cpp \
 			utils.cpp \
 			Server/Server.cpp Server/Parse.cpp Server/Getters&Setters.cpp Server/Remove.cpp \
-			Command/Pass.cpp Command/Nick.cpp
+			Command/Pass.cpp Command/Nick.cpp \
+			Client/Client.cpp Client/Getters&Setters.cpp
 
 OBJ = $(CPP_FILES:.cpp=.o)
 DEP = $(CPP_FILES:.cpp=.d)

@@ -26,11 +26,7 @@ bool	isPasswordValid(std::string pw)
 
 void	ft_error(std::string msg)
 {
-	std::cout << msg << std::endl;
-	Server	*serv = (Server*)getServ(NULL);
-	if (!serv)
-		delete serv;
-	exit(EXIT_FAILURE);
+	throw(std::runtime_error(msg));
 }
 
 void	*getServ(void *p)

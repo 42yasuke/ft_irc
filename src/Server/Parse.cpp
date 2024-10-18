@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-std::vector<std::string> Server::split_recivedBuffer(std::string str)
+std::vector<std::string> Server::splitByLine(std::string str)
 {
 	std::vector<std::string> vec;
 	std::istringstream stm(str);
@@ -57,10 +57,12 @@ int	get_cmd_type(std::string &cmd, bool registered)
 	return (CMDNOTFOUND);
 }
 
-bool Server::notregistered(int fd)
+bool isRegistered(int fd)
 {
-	if (!GetClient(fd) || GetClient(fd)->GetNickName().empty() || GetClient(fd)->GetUserName().empty() \
-	|| GetClient(fd)->GetNickName() == "*"  || !GetClient(fd)->GetLogedIn())
+	Server	*serv = (Server*)getServ(NULL);
+	Client	*cli = serv->GetClient(fd);
+	if (!cli || cli->GetNickName().empty() \
+	|| cli->GetUserName().empty() || !cli->GetLogedIn())
 		return false;
 	return true;
 }
@@ -72,7 +74,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 		cmd = cmd.substr(found);
 	else
 		return ;
-	int cmd_type = get_cmd_type(cmd, notregistered(fd));
+	int cmd_type = get_cmd_type(cmd, isRegistered(fd));
 	if (cmd_type == CMDNOTFOUND)
 		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(),cmd_type),fd);
 	else if (cmd_type == NOTREGISTERED)

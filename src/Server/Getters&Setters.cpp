@@ -20,8 +20,8 @@ Client *Server::GetClient(int fd)
 {
 	for (size_t i = 0; i < this->clients.size(); i++)
 	{
-		if (this->clients[i].GetFd() == fd)
-			return (&this->clients[i]);
+		if (this->clients[i]->GetFd() == fd)
+			return (this->clients[i]);
 	}
 	return (NULL);
 }
@@ -30,8 +30,8 @@ Client *Server::GetClientNick(std::string nickname)
 {
 	for (size_t i = 0; i < this->clients.size(); i++)
 	{
-		if (this->clients[i].GetNickName() == nickname)
-			return (&this->clients[i]);
+		if (this->clients[i]->GetNickName() == nickname)
+			return (this->clients[i]);
 	}
 	return (NULL);
 }
@@ -44,6 +44,11 @@ Channel *Server::GetChannel(std::string name)
 			return (&channels[i]);
 	}
 	return (NULL);
+}
+
+std::vector<Channel>	Server::GetAllChans(void)
+{
+	return this->channels;
 }
 
 /* ******************** Setters ******************** */
@@ -62,7 +67,7 @@ void Server::SetPassword(std::string password)
 	this->password = password;
 }
 
-void Server::AddClient(Client newClient)
+void Server::AddClient(Client *newClient)
 {
 	this->clients.push_back(newClient);
 }
@@ -85,15 +90,15 @@ void Server::set_sever_socket()
 	add.sin_port = htons(port);
 	server_fdsocket = socket(AF_INET, SOCK_STREAM, 0);
 	if(server_fdsocket == -1)
-		throw(std::runtime_error("faild to create socket"));
+		ft_error("faild to create socket");
 	if(setsockopt(server_fdsocket, SOL_SOCKET, SO_REUSEADDR, &en, sizeof(en)) == -1)
-		throw(std::runtime_error("faild to set option (SO_REUSEADDR) on socket"));
+		ft_error("faild to set option (SO_REUSEADDR) on socket");
 	if (fcntl(server_fdsocket, F_SETFL, O_NONBLOCK) == -1)
-		throw(std::runtime_error("faild to set option (O_NONBLOCK) on socket"));
+		ft_error("faild to set option (O_NONBLOCK) on socket");
 	if (bind(server_fdsocket, (struct sockaddr *)&add, sizeof(add)) == -1)
-		throw(std::runtime_error("faild to bind socket"));
+		ft_error("faild to bind socket");
 	if (listen(server_fdsocket, SOMAXCONN) == -1)
-		throw(std::runtime_error("listen() faild"));
+		ft_error("listen() faild");
 	new_cli.fd = server_fdsocket;
 	new_cli.events = POLLIN;
 	new_cli.revents = 0;

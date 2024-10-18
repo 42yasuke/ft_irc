@@ -35,16 +35,12 @@ Server &Server::operator=(Server const &src)
 	return *this;
 }
 
-/* ******************** Close and Signal Methods ******************** */
+/* ******************** Signal Methods ******************** */
 void Server::SignalHandler(int signum)
 {
 	(void)signum;
 	std::cout << std::endl << "Signal Received!" << std::endl;
 	Server::Signal = true;
-}
-
-void	Server::close_fds(){
-	
 }
 
 /* ******************** Server Methods ******************** */
@@ -59,7 +55,7 @@ void Server::startServer(int port, std::string pass)
 	while (Server::Signal == false)
 	{
 		if((poll(&fds[0],fds.size(),-1) == -1) && Server::Signal == false)
-			throw(std::runtime_error("poll() faild"));
+			ft_error("poll() faild");
 		for (size_t i = 0; i < fds.size(); i++)
 		{
 			if (fds[i].revents & POLLIN)
@@ -111,20 +107,17 @@ void Server::reciveNewData(int fd)
 	if(bytes <= 0)
 	{
 		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
-		RmChannels(fd);
 		RemoveClient(fd);
-		RemoveFds(fd);
-		close(fd);
 	}
 	else
 	{
 		cli->setBuffer(buff);
 		if(cli->getBuffer().find_first_of("\r\n") == std::string::npos)
 			return;
-		cmd = split_recivedBuffer(cli->getBuffer());
+		cmd = splitByLine(cli->getBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)
 			parse_exec_cmd(cmd[i], fd);
 		if(GetClient(fd))
-			GetClient(fd)->clearBuffer();
+			GetClient(fd)->setBuffer("");
 	}
 }

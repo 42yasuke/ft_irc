@@ -77,25 +77,22 @@ class Server
 	Client *GetClient(int fd);
 	Client *GetClientNick(std::string nickname);
 	Channel *GetChannel(std::string name);
+	std::vector<Channel>	Server::GetAllChans(void);
 
 	/* ******************** Setters ******************** */
 	void SetFd(int server_fdsocket);
 	void SetPort(int port);
 	void SetPassword(std::string password);
-	void AddClient(Client newClient);
+	void AddClient(Client *newClient);
 	void AddChannel(Channel newChannel);
 	void AddFds(pollfd newFd);
 	void set_sever_socket(void);
 
 	/* ******************** Remove Methods ******************** */
 	void RemoveClient(int fd);
-	void RemoveChannel(std::string name);
-	void RemoveFds(int fd);
-	void RmChannels(int fd);
 
-	/* ******************** Close and Signal Methods ******************** */
+	/* ******************** Signal Methods ******************** */
 	static void SignalHandler(int signum);
-	void close_fds(void);
 
 	/* ******************** Server Methods ******************** */
 	void startServer(int port, std::string pass);
@@ -103,9 +100,8 @@ class Server
 	void reciveNewData(int fd);
 
 	/* ******************** Parsing Methods ******************** */
-	static std::vector<std::string> split_recivedBuffer(std::string str);
+	static std::vector<std::string> splitByLine(std::string str);
 	static std::vector<std::string> split_cmd(std::string &str);
-	bool notregistered(int fd);
 	void parse_exec_cmd(std::string &cmd, int fd);
 
 	/* ******************** Pass command ******************** */
