@@ -1,4 +1,4 @@
-#include "Server.cpp"
+#include "Server.hpp"
 
 void	Server::pass_cmd(int fd, std::string cmd)
 {

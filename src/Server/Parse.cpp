@@ -57,7 +57,7 @@ int	get_cmd_type(std::string &cmd, bool registered)
 	return (CMDNOTFOUND);
 }
 
-bool isRegistered(int fd)
+bool	isRegistered(int fd)
 {
 	Server	*serv = (Server*)getServ(NULL);
 	Client	*cli = serv->GetClient(fd);
@@ -76,7 +76,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 		return ;
 	int cmd_type = get_cmd_type(cmd, isRegistered(fd));
 	if (cmd_type == CMDNOTFOUND)
-		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(),cmd_type),fd);
+		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), split_cmd(cmd)[0]),fd);
 	else if (cmd_type == NOTREGISTERED)
 		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
 	else

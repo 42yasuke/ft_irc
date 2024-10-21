@@ -15,16 +15,15 @@ bool	is_validNickname(std::string& nickname)
 }
 
 
-bool	nickNameInUse(std::string &nickname, std::vector<Client> &clients)
+bool	nickNameInUse(std::string &nickname, std::vector<Client*> &clients)
 {
 	for (size_t i = 0; i < clients.size(); i++)
 	{
-		if (clients[i].GetNickName() == nickname)
+		if (clients[i]->GetNickName() == nickname)
 			return true;
 	}
 	return false;
 }
-
 
 void Server::nick_cmd(int fd, std::string cmd)
 {
@@ -41,32 +40,25 @@ void Server::nick_cmd(int fd, std::string cmd)
 	else
 	{
 		Client *cli = GetClient(fd);
-		if(cli && cli->getRegistered())
+		if (!cli)
+			ft_error("Server::nick_cmd at GetClient(fd) failed");
+		if(cli->getRegistered())
 		{
-
 			std::string oldnick = cli->GetNickName(); 
 			cli->SetNickname(cmd);
-			//faut prevenir tout le monde du changement de blaze
-			if(!oldnick.empty() && oldnick != cmd)
+			if (cli->GetLogedIn())
 			{
-				if(oldnick == "*" && !cli->GetUserName().empty())
+				for (size_t i = 0; i < this->channels.size(); i++)
 				{
-					cli->setLogedin(true);
-					_sendResponse(RPL_CONNECTED(cli->GetNickName()), fd);
-					_sendResponse(RPL_NICKCHANGE(cli->GetNickName(),cmd), fd);
+					if (this->channels[i].get_client(fd))
+						this->channels[i].sendTo_all_but_not_him(RPL_NICKCHANGE(oldnick,cmd), fd);
 				}
-				else
-					_sendResponse(RPL_NICKCHANGE(oldnick,cmd), fd);
-				return;
+				_sendResponse(RPL_NICKCHANGE(oldnick,cmd), fd);
 			}
-			
+			else
+				cli->setLogedin(true);
 		}
-		else if (cli && !cli->getRegistered())
+		else if (cli->getRegistered())
 			_sendResponse(ERR_NOTREGISTERED(cmd), fd);
-	}
-	if(cli && cli->getRegistered() && !cli->GetUserName().empty() && !cli->GetNickName().empty() && cli->GetNickName() != "*" && !cli->GetLogedIn())
-	{
-		cli->setLogedin(true);
-		_sendResponse(RPL_CONNECTED(cli->GetNickName()), fd);
 	}
 }

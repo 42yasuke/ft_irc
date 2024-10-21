@@ -7,10 +7,11 @@ RM = rm -f
 INC = -I includes/
 
 CPP_FILES =	main.cpp \
-			utils.cpp \
+			Utils/utils.cpp Utils/send.cpp \
 			Server/Server.cpp Server/Parse.cpp Server/Getters&Setters.cpp Server/Remove.cpp \
 			Command/Pass.cpp Command/Nick.cpp \
-			Client/Client.cpp Client/Getters&Setters.cpp
+			Client/Client.cpp Client/Getters&Setters.cpp \
+			Channel/Channel.cpp Channel/Getters&Setters.cpp
 
 OBJ = $(CPP_FILES:.cpp=.o)
 DEP = $(CPP_FILES:.cpp=.d)
