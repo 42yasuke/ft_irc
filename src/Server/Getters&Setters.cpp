@@ -1,20 +1,11 @@
 #include "Server.hpp"
 
 /* ******************** Getters ******************** */
-int Server::GetPort(void)
-{
-	return (this->port);
-}
+int Server::GetPort(void) { return (this->port); }
 
-int Server::GetFd(void)
-{
-	return (this->server_fdsocket);
-}
+int Server::GetFd(void) { return (this->server_fdsocket); }
 
-std::string Server::GetPassword(void)
-{
-	return (this->password);
-}
+std::string Server::GetPassword(void) { return (this->password); }
 
 Client *Server::GetClient(int fd)
 {
@@ -46,41 +37,20 @@ Channel *Server::GetChannel(std::string name)
 	return (NULL);
 }
 
-std::vector<Channel>	Server::GetAllChans(void)
-{
-	return this->channels;
-}
+std::vector<Channel>	Server::GetAllChans(void) { return this->channels; }
 
 /* ******************** Setters ******************** */
-void Server::SetFd(int fd)
-{
-	this->server_fdsocket = fd;
-}
+void Server::SetFd(int fd) { this->server_fdsocket = fd; }
 
-void Server::SetPort(int port)
-{
-	this->port = port;
-}
+void Server::SetPort(int port) { this->port = port; }
 
-void Server::SetPassword(std::string password)
-{
-	this->password = password;
-}
+void Server::SetPassword(std::string password) { this->password = password; }
 
-void Server::AddClient(Client *newClient)
-{
-	this->clients.push_back(newClient);
-}
+void Server::AddClient(Client *newClient) { this->clients.push_back(newClient); }
 
-void Server::AddChannel(Channel newChannel)
-{
-	this->channels.push_back(newChannel);
-}
+void Server::AddChannel(Channel newChannel) { this->channels.push_back(newChannel); }
 
-void Server::AddFds(pollfd newFd)
-{
-	this->fds.push_back(newFd);
-}
+void Server::AddFds(pollfd newFd) { this->fds.push_back(newFd); }
 
 void Server::set_sever_socket()
 {

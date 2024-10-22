@@ -51,7 +51,7 @@ void Server::nick_cmd(int fd, std::string cmd)
 				for (size_t i = 0; i < this->channels.size(); i++)
 				{
 					if (this->channels[i].get_client(fd))
-						this->channels[i].sendTo_all_but_not_him(RPL_NICKCHANGE(oldnick,cmd), fd);
+						this->channels[i].sendToAll_but_not_him(RPL_NICKCHANGE(oldnick,cmd), fd);
 				}
 				_sendResponse(RPL_NICKCHANGE(oldnick,cmd), fd);
 			}

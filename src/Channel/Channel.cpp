@@ -2,9 +2,7 @@
 
 Channel::Channel()
 {
-	this->invit_only = 0;
-	this->topic = 0;
-	this->key = 0;
+	this->inviteOnly = false;
 	this->limit = 0;
 	this->topic_restriction = false;
 	this->name = "";
@@ -12,24 +10,21 @@ Channel::Channel()
 	char charaters[5] = {'i', 't', 'k', 'o', 'l'};
 	for (int i = 0; i < 5; i++)
 		modes.push_back(std::make_pair(charaters[i], false));
-	this->created_at = "";
 }
 
 Channel::~Channel() {}
+
 Channel::Channel(Channel const &src) { *this = src; }
 
 Channel &Channel::operator=(Channel const &src)
 {
 	if (this != &src)
 	{
-		this->invit_only = src.invit_only;
-		this->topic = src.topic;
-		this->key = src.key;
+		this->inviteOnly = src.inviteOnly;
 		this->limit = src.limit;
 		this->topic_restriction = src.topic_restriction;
 		this->name = src.name;
 		this->password = src.password;
-		this->created_at = src.created_at;
 		this->topic_name = src.topic_name;
 		this->clients = src.clients;
 		this->admins = src.admins;
@@ -40,6 +35,7 @@ Channel &Channel::operator=(Channel const &src)
 
 /* ******************** Methods ******************** */
 void Channel::add_client(Client *newClient) { clients.push_back(newClient); }
+
 void Channel::add_admin(Client *newClient) { admins.push_back(newClient); }
 
 void Channel::remove_client(int fd)
@@ -53,6 +49,7 @@ void Channel::remove_client(int fd)
 		}
 	}
 }
+
 void Channel::remove_admin(int fd)
 {
 	for (std::vector<Client*>::iterator it = admins.begin(); it != admins.end(); ++it)
@@ -64,6 +61,7 @@ void Channel::remove_admin(int fd)
 		}
 	}
 }
+
 bool Channel::change_clientToAdmin(std::string &nick)
 {
 	size_t i = 0;
@@ -97,30 +95,3 @@ bool Channel::change_adminToClient(std::string &nick)
 	}
 	return false;
 }
-
-//---------------//SendToAll
-void Channel::sendTo_all(std::string rpl1)
-{
-	for (size_t i = 0; i < admins.size(); i++)
-		if (send(admins[i]->GetFd(), rpl1.c_str(), rpl1.size(), 0) == -1)
-			std::cerr << "send() faild" << std::endl;
-	for (size_t i = 0; i < clients.size(); i++)
-		if (send(clients[i]->GetFd(), rpl1.c_str(), rpl1.size(), 0) == -1)
-			std::cerr << "send() faild" << std::endl;
-}
-void Channel::sendTo_all_but_not_him(std::string rpl1, int fd)
-{
-	for (size_t i = 0; i < admins.size(); i++)
-	{
-		if (admins[i]->GetFd() != fd)
-			if (send(admins[i]->GetFd(), rpl1.c_str(), rpl1.size(), 0) == -1)
-				std::cerr << "send() faild" << std::endl;
-	}
-	for (size_t i = 0; i < clients.size(); i++)
-	{
-		if (clients[i]->GetFd() != fd)
-			if (send(clients[i]->GetFd(), rpl1.c_str(), rpl1.size(), 0) == -1)
-				std::cerr << "send() faild" << std::endl;
-	}
-}
-//---------------//SendToAll

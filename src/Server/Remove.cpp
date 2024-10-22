@@ -17,7 +17,7 @@ void	RmChannels(int fd)
 			{chanList.erase(chanList.begin() + i); i--; continue;}
 		if (flag){
 			std::string rpl = ":" + nick + "!~" + user + "@localhost QUIT Quit\r\n";
-			chanList[i].sendTo_all(rpl);
+			chanList[i].sendToAll(rpl);
 		}
 	}
 }

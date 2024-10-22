@@ -1,12 +1,16 @@
 #include "Channel.hpp"
 
 /* ******************** Getters ******************** */
-int Channel::GetInvitOnly() { return this->invit_only; }
-int Channel::GetTopic() { return this->topic; }
-int Channel::GetKey() { return this->key; }
+bool Channel::GetInvitOnly(void) { return this->inviteOnly;}
+
 int Channel::GetLimit() { return this->limit; }
+
 int Channel::GetClientsNumber() { return this->clients.size() + this->admins.size(); }
+
+std::string Channel::get_creationtime() {return created_at;}
+
 bool Channel::Gettopic_restriction() const { return this->topic_restriction; }
+
 bool Channel::getModeAtindex(size_t index) { return modes[index].second; }
 
 bool Channel::clientInChannel(std::string &nick)
@@ -25,10 +29,12 @@ bool Channel::clientInChannel(std::string &nick)
 }
 
 std::string Channel::GetTopicName() { return this->topic_name; }
+
 std::string Channel::GetPassword() { return this->password; }
+
 std::string Channel::GetName() { return this->name; }
+
 std::string Channel::GetTime() { return this->time_creation; }
-std::string Channel::get_creationtime() { return created_at; }
 
 std::string Channel::getModes()
 {
@@ -99,15 +105,20 @@ Client *Channel::GetClientInChannel(std::string name)
 }
 
 /* ******************** Setters ******************** */
-void Channel::SetInvitOnly(int invit_only) { this->invit_only = invit_only; }
-void Channel::SetTopic(int topic) { this->topic = topic; }
+void Channel::SetInvitOnly(bool inviteOnly) { this->inviteOnly = inviteOnly;}
+
 void Channel::SetTime(std::string time) { this->time_creation = time; }
-void Channel::SetKey(int key) { this->key = key; }
+
 void Channel::SetLimit(int limit) { this->limit = limit; }
+
 void Channel::SetTopicName(std::string topic_name) { this->topic_name = topic_name; }
+
 void Channel::SetPassword(std::string password) { this->password = password; }
+
 void Channel::SetName(std::string name) { this->name = name; }
+
 void Channel::set_topicRestriction(bool value) { this->topic_restriction = value; }
+
 void Channel::setModeAtindex(size_t index, bool mode) { modes[index].second = mode; }
 
 void Channel::set_createiontime()
