@@ -112,7 +112,7 @@ void Server::reciveNewData(int fd)
 	else
 	{
 		cli->setBuffer(buff);
-		if(cli->getBuffer().find_first_of("\r\n") == std::string::npos)
+		if(cli->getBuffer().find_first_of("\n") == std::string::npos)
 			return;
 		cmd = splitByLine(cli->getBuffer());
 		for(size_t i = 0; i < cmd.size(); i++)

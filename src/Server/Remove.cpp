@@ -16,7 +16,7 @@ void	RmChannels(int fd)
 		if (chanList[i].GetClientsNumber() == 0)
 			{chanList.erase(chanList.begin() + i); i--; continue;}
 		if (flag){
-			std::string rpl = ":" + nick + "!~" + user + "@localhost QUIT Quit\r\n";
+			std::string rpl = ":" + nick + "!~" + user + "@localhost QUIT Quit\n";
 			chanList[i].sendToAll(rpl);
 		}
 	}

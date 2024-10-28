@@ -29,7 +29,6 @@ class Channel
 		int GetClientsNumber(void);
 		bool Gettopic_restriction(void) const;
 		bool getModeAtindex(size_t index);
-		std::string Channel::get_creationtime();
 		bool clientInChannel(std::string &nick);
 		std::string GetTopicName(void);
 		std::string GetPassword(void);

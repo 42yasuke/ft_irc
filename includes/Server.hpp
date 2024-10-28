@@ -55,15 +55,13 @@ class Server
 
 		/* ******************** Parsing Methods ******************** */
 		static std::vector<std::string>	splitByLine(std::string str);
-		static std::vector<std::string>	split_cmd(std::string &str);
+		static std::vector<std::string>	splitBySpace(std::string &str);
 		void	parse_exec_cmd(std::string &cmd, int fd);
 
-		/* ******************** Pass command ******************** */
+		/* ******************** Command Methods ******************** */
 		void	pass_cmd(int fd, std::string cmd);
-
-		/* ******************** Nick command ******************** */
-		void	set_username(std::string &username, int fd);
 		void	nick_cmd(int fd, std::string cmd);
+		void	user_cmd(int fd, std::string username);
 
 		//---------------//Authentification Methods
 		

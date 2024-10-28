@@ -10,7 +10,7 @@ std::vector<std::string> Server::splitByLine(std::string str)
 	return (vec);
 }
 
-std::vector<std::string> Server::split_cmd(std::string &cmd)
+std::vector<std::string> Server::splitBySpace(std::string &cmd)
 {
 	std::vector<std::string> vec;
 	std::istringstream stm(cmd);
@@ -76,7 +76,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 		return ;
 	int cmd_type = get_cmd_type(cmd, isRegistered(fd));
 	if (cmd_type == CMDNOTFOUND)
-		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), split_cmd(cmd)[0]),fd);
+		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splitBySpace(cmd)[0]),fd);
 	else if (cmd_type == NOTREGISTERED)
 		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
 	else
@@ -85,7 +85,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 		{
 			&Server::pass_cmd,
 			&Server::nick_cmd,
-			&Server::set_username,
+			&Server::user_cmd,
 			&Server::KICK,
 			&Server::JOIN,
 			&Server::Topic,

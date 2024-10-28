@@ -59,7 +59,7 @@
 # define RPL_ENDOFNAMES(nickname, channelname) (": 366 " + nickname + " #" + channelname + " :END of /NAMES list" + BN)
 # define RPL_TOPICIS(nickname, channelname, topic) (": 332 " + nickname + " #" +channelname + " :" + topic + BN)
 
-/* ******************** Error Macro ******************** */
+/* ******************** IRC Error Macro ******************** */
 # define ERR_NEEDMODEPARM(channelname, mode) (": 696 #" + channelname + " * You must specify a parameter for the key mode. " + mode + BN)
 # define ERR_INVALIDMODEPARM(channelname, mode) ": 696 #" + channelname + " Invalid mode parameter. " + mode + BN
 # define ERR_KEYSET(channelname) ": 467 #" + channelname + " Channel key already set. " + BN
@@ -75,5 +75,9 @@
 # define ERR_ERRONEUSNICK(nickname) (": 432 " + nickname + " :Erroneus nickname" + BN)
 # define ERR_NOTREGISTERED(nickname) (": 451 " + nickname + " :You have not registered!" + BN)
 # define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + BN)
+
+/* ******************** Personal Error Macro ******************** */
+# define ERR_BADNICKNAME(nickname) (":" +  nickname + " :bad nickname given" + BN )
+# define ERR_BADPARAM(nickname) (":" +  nickname + " :bad parameters given" + BN )
 
 #endif
