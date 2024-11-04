@@ -86,13 +86,13 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::pass_cmd,
 			&Server::nick_cmd,
 			&Server::user_cmd,
+			&Server::privmsg_cmd,
 			&Server::KICK,
 			&Server::JOIN,
 			&Server::Topic,
 			&Server::mode_command,
 			&Server::PART,
-			&Server::PRIVMSG,
-			&Server::Invite,
+			&Server::Invite
 		};
 		this->cmd[cmd_type](fd, cmd);
 	}
