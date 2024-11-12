@@ -30,7 +30,6 @@ class Server
 		std::string GetPassword(void);
 		Client	*GetClient(int fd);
 		Client	*GetClientNick(std::string nickname);
-		Channel	*GetChannel(std::string name);
 		std::vector<Channel>	GetAllChans(void);
 
 		/* ******************** Setters ******************** */
@@ -61,10 +60,8 @@ class Server
 		/* ******************** Command Methods ******************** */
 		void	pass_cmd(int fd, std::string cmd);
 		void	nick_cmd(int fd, std::string cmd);
-		void	user_cmd(int fd, std::string username);
-
-		//---------------//Authentification Methods
-		
+		void	user_cmd(int fd, std::string cmd);
+		void	privmsg_cmd(int fd, std::string cmd);
 
 		void	ft_display(void);
 };

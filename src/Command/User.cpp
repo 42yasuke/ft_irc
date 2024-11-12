@@ -12,9 +12,6 @@ bool	onlyAlphaOrSpace(const std::string& str)
 
 std::string	getHisUserName(std::string &cmd, std::string nickName, int fd)
 {
-	Server *serv = (Server*)getServ(NULL);
-	if (!serv)
-		ft_error("getServ failed");
 	std::string ret = "";
 	std::vector<std::string> vCmd = Server::splitBySpace(cmd);
 	if (vCmd[1] != nickName)

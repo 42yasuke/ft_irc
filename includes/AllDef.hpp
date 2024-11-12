@@ -44,6 +44,8 @@
 # define PORT_AUTORISAT_MAX 65535
 
 # define MAX_CHAR 9
+# define MAX_CHAR_TRONC 20
+# define MAX_CMD_LENGTH 512
 
 # define BN "\n"
 
@@ -77,6 +79,7 @@
 # define ERR_CMDNOTFOUND(nickname, command) (": 421 " + nickname + " " + command + " :Unknown command" + BN)
 
 /* ******************** Personal Error Macro ******************** */
+# define ERR_MAXCMDLENGTH(cmd) (":" +  cmd + " :command too long" + BN )
 # define ERR_BADNICKNAME(nickname) (":" +  nickname + " :bad nickname given" + BN )
 # define ERR_BADPARAM(nickname) (":" +  nickname + " :bad parameters given" + BN )
 

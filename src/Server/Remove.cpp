@@ -3,6 +3,8 @@
 void	RmChannels(int fd)
 {
 	Server	*serv = (Server*)getServ(NULL);
+	if (!serv)
+		ft_error("getServ failed");
 	std::vector<Channel>	chanList = serv->GetAllChans();
 	std::string	nick = serv->GetClient(fd)->GetNickName();
 	std::string	user = serv->GetClient(fd)->GetUserName();

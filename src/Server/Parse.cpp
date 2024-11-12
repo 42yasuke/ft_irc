@@ -60,6 +60,8 @@ int	get_cmd_type(std::string &cmd, bool registered)
 bool	isRegistered(int fd)
 {
 	Server	*serv = (Server*)getServ(NULL);
+	if (!serv)
+		ft_error("getServ failed");
 	Client	*cli = serv->GetClient(fd);
 	if (!cli || cli->GetNickName().empty() \
 	|| cli->GetUserName().empty() || !cli->GetLogedIn())
@@ -81,7 +83,9 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
 	else
 	{
-		void (Server::*cmd[])(int, std::string) = 
+		if (cmd.size() > MAX_CMD_LENGTH)
+			{_sendResponse(ERR_MAXCMDLENGTH(cmd.substr(0, MAX_CHAR_TRONC) + "..."), fd); return;}
+		void (Server::*ptr_cmd[])(int, std::string) = 
 		{
 			&Server::pass_cmd,
 			&Server::nick_cmd,
@@ -94,6 +98,6 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::PART,
 			&Server::Invite
 		};
-		this->cmd[cmd_type](fd, cmd);
+		this->ptr_cmd[cmd_type](fd, cmd);
 	}
 }
