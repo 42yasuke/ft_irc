@@ -92,11 +92,10 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::user_cmd,
 			&Server::privmsg_cmd,
 			&Server::invite_cmd,
-			&Server::KICK,
+			&Server::kick_cmd,
 			&Server::JOIN,
 			&Server::Topic,
-			&Server::mode_command,
-			&Server::PART
+			&Server::mode_command
 		};
 		this->ptr_cmd[cmd_type](fd, cmd);
 	}
