@@ -17,7 +17,7 @@ Client *Server::GetClient(int fd)
 	return (NULL);
 }
 
-Client *Server::GetClientNick(std::string nickname)
+Client *Server::GetClient(std::string nickname)
 {
 	for (size_t i = 0; i < this->clients.size(); i++)
 	{
@@ -25,6 +25,18 @@ Client *Server::GetClientNick(std::string nickname)
 			return (this->clients[i]);
 	}
 	return (NULL);
+}
+
+size_t	Server::GetChan(std::string chanName)
+{
+	size_t	i = 0;
+	bool	flag = false;
+	while (i < this->channels.size() && !flag)
+	{
+		if (this->channels[i].GetName() == chanName)
+			return i;
+	}
+	return INT32_MAX;
 }
 
 std::vector<Channel>	Server::GetAllChans(void) { return this->channels; }

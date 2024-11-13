@@ -29,7 +29,8 @@ class Server
 		int	GetPort(void);
 		std::string GetPassword(void);
 		Client	*GetClient(int fd);
-		Client	*GetClientNick(std::string nickname);
+		Client	*GetClient(std::string nickname);
+		size_t	GetChan(std::string chanName);
 		std::vector<Channel>	GetAllChans(void);
 
 		/* ******************** Setters ******************** */

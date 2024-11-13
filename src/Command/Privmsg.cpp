@@ -1,19 +1,5 @@
 #include "Server.hpp"
 
-bool	isAGoodChannel(std::string name)
-{
-	Server	*serv = (Server*)getServ(NULL);
-	if (!serv)
-		ft_error("getServ failed");
-	std::vector<Channel> chanList = serv->GetAllChans();
-	for (size_t i = 0; i < chanList.size(); i++)
-	{
-		if (chanList[i].GetName() == name)
-			return (true);
-	}
-	return (false);
-}
-
 bool	isValidDest(int fd, std::string dest)
 {
 	Server	*serv = (Server*)getServ(NULL);
@@ -22,10 +8,10 @@ bool	isValidDest(int fd, std::string dest)
 	Client	*cli = serv->GetClient(fd);
 	if (dest.empty())
 		return (senderror(411, cli->GetNickName(), fd, " :No recipient given (PRIVMSG)\n"), false);
-	if (dest[0] != '#' && !serv->GetClientNick(dest))
+	if (dest[0] != '#' && !serv->GetClient(dest))
 		return (senderror(401, cli->GetNickName(), fd, " :" + dest + " :No such nick\n"), false);
-	if (dest[0] == '#' && !isAGoodChannel(dest.substr(1)))
-		return (senderror(401, cli->GetNickName(), fd, " :" + dest.substr(1) + " :No such channel\n"), false);
+	if (dest[0] == '#' && serv->GetChan(dest.substr(1)) == INT32_MAX)
+		return (senderror(401, cli->GetNickName(), fd, " :" + dest + " :No such channel\n"), false);
 	return (true);
 }
 
@@ -56,7 +42,7 @@ void	Server::privmsg_cmd(int fd, std::string cmd)
 	if (dest[0] != '#')
 	{
 		msg = "<" + GetClient(fd)->GetNickName() + "> " + msg + BN;
-		_sendResponse(msg, GetClientNick(dest)->GetFd());
+		_sendResponse(msg, GetClient(dest)->GetFd());
 	}
 	else
 	{
