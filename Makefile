@@ -9,7 +9,7 @@ INC = -I includes/
 CPP_FILES =	main.cpp \
 			Utils/utils.cpp Utils/send.cpp \
 			Server/Server.cpp Server/Parse.cpp Server/GettersSetters.cpp Server/Remove.cpp \
-			Command/Pass.cpp Command/Nick.cpp Command/User.cpp Command/PRIVMSG.cpp \
+			Command/Pass.cpp Command/Nick.cpp Command/User.cpp Command/Privmsg.cpp Command/Invite.cpp \
 			Client/Client.cpp Client/GettersSetters.cpp \
 			Channel/Channel.cpp Channel/GettersSetters.cpp Channel/SendToALL.cpp
 

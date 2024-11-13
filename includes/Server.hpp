@@ -62,6 +62,7 @@ class Server
 		void	nick_cmd(int fd, std::string cmd);
 		void	user_cmd(int fd, std::string cmd);
 		void	privmsg_cmd(int fd, std::string cmd);
+		void	invite_cmd(int fd, std::string cmd);
 
 		void	ft_display(void);
 };
