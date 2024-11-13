@@ -55,7 +55,7 @@ void Server::startServer(int port, std::string pass)
 	while (Server::Signal == false)
 	{
 		if((poll(&fds[0],fds.size(),-1) == -1) && Server::Signal == false)
-			ft_error("poll() faild");
+			ft_error("poll() failed");
 		for (size_t i = 0; i < fds.size(); i++)
 		{
 			if (fds[i].revents & POLLIN)

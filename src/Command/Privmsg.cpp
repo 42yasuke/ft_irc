@@ -42,7 +42,7 @@ bool	isValidMsg(int fd, std::string msg)
 
 void	Server::privmsg_cmd(int fd, std::string cmd)
 {
-	cmd = cmd.substr(8);
+	cmd = cmd.substr(7);
 	std::stringstream ss(cmd);
 	std::string dest, msg, tmp;
 	ss >> dest;
