@@ -11,7 +11,7 @@ bool	isValidNickAndChan(int fd, std::string nickName, std::string chanName)
 		return (senderror(461, "", fd, ERR_BADPARAM(cli->GetNickName())), false);
 	if (!cli2)
 		return (_sendResponse(ERR_NOSUCHNICK(cli->GetNickName()), fd), false);
-	if (serv->GetChan(chanName) == INT32_MAX)
+	if (serv->GetChan(chanName) == INT_MAX)
 		return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName.substr(1)), fd), false);
 	Channel chan = serv->GetAllChans()[serv->GetChan(chanName.substr(1))];
 	if (!chan.get_client(fd))

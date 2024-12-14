@@ -6,7 +6,7 @@ void	Server::pass_cmd(int fd, std::string cmd)
 	cmd = cmd.substr(4);
 	size_t pos = cmd.find_first_not_of("\t\v ");
 	if (pos == std::string::npos)
-		{_sendResponse(ERR_NOTENOUGHPARAM(std::string("*")), fd); return;}
+		{_sendResponse(ERR_NEEDMOREPARAMS (std::string("*")), fd); return;}
 	cmd = cmd.substr(pos);
 	if (!cli->getRegistered())
 	{

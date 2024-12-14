@@ -10,7 +10,7 @@ bool	isValidDest(int fd, std::string dest)
 		return (senderror(411, cli->GetNickName(), fd, " :No recipient given (PRIVMSG)\n"), false);
 	if (dest[0] != '#' && !serv->GetClient(dest))
 		return (senderror(401, cli->GetNickName(), fd, " :" + dest + " :No such nick\n"), false);
-	if (dest[0] == '#' && serv->GetChan(dest.substr(1)) == INT32_MAX)
+	if (dest[0] == '#' && serv->GetChan(dest.substr(1)) == INT_MAX)
 		return (senderror(401, cli->GetNickName(), fd, " :" + dest + " :No such channel\n"), false);
 	return (true);
 }

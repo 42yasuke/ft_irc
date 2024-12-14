@@ -36,7 +36,7 @@ size_t	Server::GetChan(std::string chanName)
 		if (this->channels[i].GetName() == chanName)
 			return i;
 	}
-	return INT32_MAX;
+	return INT_MAX;
 }
 
 std::vector<Channel>	Server::GetAllChans(void) { return this->channels; }

@@ -37,7 +37,7 @@ void	Server::user_cmd(int fd, std::string cmd)
 	if(!cli || !cli->getRegistered())
 		return (_sendResponse(ERR_NOTREGISTERED(std::string("*")), fd));
 	if(splited_cmd.size() != 5)
-		return (_sendResponse(ERR_NOTENOUGHPARAM(cli->GetNickName()), fd));
+		return (_sendResponse(ERR_NEEDMOREPARAMS(cli->GetNickName()), fd));
 	if (!cli->GetUserName().empty())
 		return (_sendResponse(ERR_ALREADYREGISTERED(cli->GetNickName()), fd));
 	std::string userName = getHisUserName(cmd, cli->GetNickName(), fd);
