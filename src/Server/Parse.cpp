@@ -93,6 +93,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::privmsg_cmd,
 			&Server::invite_cmd,
 			&Server::kick_cmd,
+			&Server::part_cmd,
 			&Server::JOIN,
 			&Server::Topic,
 			&Server::mode_command

@@ -43,6 +43,10 @@ void	ft_fillMykList(int fd, std::string chanName, std::string kickList, std::vec
 			{_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chanName), fd); continue;}
 		kList.push_back(tmp);
 	}
+	if (kList.empty())
+		_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd);
+	else if (kList.size() > MAX_KICK_LIST)
+		_sendResponse(ERR_TOOMANYTARGETS(cli->GetNickName()), fd);
 }
 
 void	Server::kick_cmd(int fd, std::string cmd)

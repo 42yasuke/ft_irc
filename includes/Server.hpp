@@ -65,7 +65,7 @@ class Server
 		void	privmsg_cmd(int fd, std::string cmd);
 		void	invite_cmd(int fd, std::string cmd);
 		void	kick_cmd(int fd, std::string cmd);
-
+		void	part_cmd(int fd, std::string cmd);
 		void	ft_display(void);
 };
 

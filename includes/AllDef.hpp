@@ -49,6 +49,7 @@
 # define MAX_CHAR 9
 # define MAX_CHAR_TRONC 20
 # define MAX_CMD_LENGTH 512
+# define MAX_KICK_LIST 3
 
 # define BN "\n"
 
@@ -88,5 +89,6 @@
 # define ERR_MAXCMDLENGTH(cmd) (":" + cmd + " :command too long" + BN )
 # define ERR_BADNICKNAME(nickname) (":" + nickname + " :bad nickname given" + BN )
 # define ERR_BADPARAM(nickname) (":" + nickname + " :bad parameters given" + BN )
+# define ERR_TOOMANYTARGETS(nickname) (":" + nickname + " :too many targets" + BN )
 
 #endif
