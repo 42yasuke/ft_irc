@@ -8,8 +8,15 @@ bool	isGoodParams(int fd, std::string chanName, std::string kickList, std::strin
 	Client	*cli = serv->GetClient(fd);
 	if (chanName.empty() || kickList.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-	if (chanName[0] != '#' || (reason.empty() && reason[0] != ':'))
+	if (chanName[0] != '#' || (!reason.empty() && reason[0] != ':'))
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	if (!reason.empty())
+	{
+		reason = reason.substr(1);
+		for (size_t i = 0; i < reason.size(); i++)
+			if (!isalpha(reason[i]) && !reason[i] != ' ')
+				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	}
 	if (serv->GetChan(chanName.substr(1)) == INT_MAX)
 		return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName.substr(1)), fd), false);
 	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName.substr(1))];

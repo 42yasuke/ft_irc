@@ -38,3 +38,15 @@ void	Server::RemoveClient(int fd)
 		}
 	}
 }
+
+void	Server::RemoveChan(std::string chanName)
+{
+	for (size_t i = 0; i < this->channels.size(); i++)
+	{
+		if (this->channels[i].GetName() == chanName)
+		{
+			this->channels.erase(this->channels.begin() + i);
+			break;
+		}
+	}
+}

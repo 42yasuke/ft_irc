@@ -90,5 +90,6 @@
 # define ERR_BADNICKNAME(nickname) (":" + nickname + " :bad nickname given" + BN )
 # define ERR_BADPARAM(nickname) (":" + nickname + " :bad parameters given" + BN )
 # define ERR_TOOMANYTARGETS(nickname) (":" + nickname + " :too many targets" + BN )
+# define RPL_PART(nickname, channel, reason) (":" + nickname + " PART #" + channel + " " + reason + BN)
 
 #endif
