@@ -1,37 +1,26 @@
 #include "Server.hpp"
 
-void	RmChannels(int fd)
+void	RmThisFdFromAllChans(int fd, std::string reason)
 {
 	Server	*serv = (Server*)getServ(NULL);
 	if (!serv)
 		ft_error("getServ failed");
-	std::vector<Channel>	chanList = serv->GetAllChans();
-	std::string	nick = serv->GetClient(fd)->GetNickName();
-	std::string	user = serv->GetClient(fd)->GetUserName();
-	for (size_t i = 0; i < chanList.size(); i++)
+	Client *cli = serv->GetClient(fd);
+	for (std::vector<Channel>::iterator it = serv->GetAllChans().begin(); it != serv->GetAllChans().end(); it++)
 	{
-		int flag = 0;
-		if (chanList[i].get_client(fd))
-			{chanList[i].remove_client(fd); flag = 1;}
-		else if (chanList[i].get_admin(fd))
-			{chanList[i].remove_admin(fd); flag = 1;}
-		if (chanList[i].GetClientsNumber() == 0)
-			{chanList.erase(chanList.begin() + i); i--; continue;}
-		if (flag){
-			std::string rpl = ":" + nick + "!~" + user + "@localhost QUIT Quit\n";
-			chanList[i].sendToAll(rpl);
-		}
+		if (it->get_client(fd))
+			{it->remove_client(fd); it->sendToAll(RPL_QUIT(cli->GetNickName(), reason));}
 	}
 }
 
-void	Server::RemoveClient(int fd)
+void	Server::RemoveClient(int fd, std::string reason)
 {
 	for (size_t i = 0; i < this->clients.size(); i++)
 	{
 		if (this->clients[i]->GetFd() == fd)
 		{
 			this->fds.erase(this->fds.begin() + i);
-			RmChannels(fd);
+			RmThisFdFromAllChans(fd, reason);
 			this->clients.erase(this->clients.begin() + i);
 			delete this->clients[i];
 			break;

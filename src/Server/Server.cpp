@@ -107,7 +107,7 @@ void Server::reciveNewData(int fd)
 	if(bytes <= 0)
 	{
 		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
-		RemoveClient(fd);
+		RemoveClient(fd, SP);
 	}
 	else
 	{

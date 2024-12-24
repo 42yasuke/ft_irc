@@ -78,9 +78,9 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 		return ;
 	int cmd_type = get_cmd_type(cmd, isRegistered(fd));
 	if (cmd_type == CMDNOTFOUND)
-		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splitBySpace(cmd)[0]),fd);
+		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splitBySpace(cmd)[0]), fd);
 	else if (cmd_type == NOTREGISTERED)
-		_sendResponse(ERR_NOTREGISTERED(std::string("*")),fd);
+		_sendResponse(ERR_NOTREGISTERED(std::string("*")), fd);
 	else
 	{
 		if (cmd.size() > MAX_CMD_LENGTH)
@@ -94,6 +94,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::invite_cmd,
 			&Server::kick_cmd,
 			&Server::part_cmd,
+			&Server::quit_cmd,
 			&Server::JOIN,
 			&Server::Topic,
 			&Server::mode_command

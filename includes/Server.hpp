@@ -43,7 +43,7 @@ class Server
 		void	set_sever_socket(void);
 
 		/* ******************** Remove Methods ******************** */
-		void	RemoveClient(int fd);
+		void	RemoveClient(int fd, std::string reason);
 		void	RemoveChan(std::string chanName);
 
 		/* ******************** Signal Methods ******************** */
@@ -67,6 +67,7 @@ class Server
 		void	invite_cmd(int fd, std::string cmd);
 		void	kick_cmd(int fd, std::string cmd);
 		void	part_cmd(int fd, std::string cmd);
+		void	quit_cmd(int fd, std::string cmd);
 
 		/* ******************** Display Methods ******************** */
 		void	ft_display(void);

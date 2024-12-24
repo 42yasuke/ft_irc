@@ -52,6 +52,7 @@
 # define MAX_KICK_LIST 3
 
 # define BN "\n"
+# define SP " "
 
 /* ******************** RPL Macro ******************** */
 # define RPL_CONNECTED(nickname) (": 001 " + nickname + " : Welcome to the IRC server!" + BN)
@@ -91,5 +92,6 @@
 # define ERR_BADPARAM(nickname) (":" + nickname + " :bad parameters given" + BN )
 # define ERR_TOOMANYTARGETS(nickname) (":" + nickname + " :too many targets" + BN )
 # define RPL_PART(nickname, channel, reason) (":" + nickname + " PART #" + channel + " " + reason + BN)
+# define RPL_QUIT(nickname, reason) (":" + nickname + " QUIT :" + reason + BN)
 
 #endif
