@@ -68,6 +68,7 @@ class Server
 		void	kick_cmd(int fd, std::string cmd);
 		void	part_cmd(int fd, std::string cmd);
 		void	quit_cmd(int fd, std::string cmd);
+		void	list_cmd(int fd, std::string cmd);
 
 		/* ******************** Display Methods ******************** */
 		void	ft_display(void);

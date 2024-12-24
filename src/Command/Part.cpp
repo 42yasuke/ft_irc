@@ -30,9 +30,6 @@ bool isGoodParams(int fd, std::string chanList, std::vector<Channel> &cList, std
 
 void	Server::part_cmd(int fd, std::string cmd)
 {
-	Server *serv = (Server*)getServ(NULL);
-	if (!serv)
-		ft_error("getServ failed");
 	cmd = cmd.substr(4);
 	std::string chanList, reason;
 	std::vector<Channel> cList;
@@ -51,8 +48,7 @@ void	Server::part_cmd(int fd, std::string cmd)
 			{_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chan.GetName()), fd); continue;}
 		chan.sendToAll(RPL_PART(cli->GetNickName(), chan.GetName(), reason));
 		chan.remove_client(fd);
-		chan.remove_admin(fd);
 		if (!chan.GetClientsNumber())
-			serv->RemoveChan(chan.GetName());
+			this->RemoveChan(chan.GetName());
 	}
 }

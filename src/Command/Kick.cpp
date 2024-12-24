@@ -82,6 +82,5 @@ void	Server::kick_cmd(int fd, std::string cmd)
 		send((*it)->GetFd(), kickMsg.c_str(), kickMsg.length(), 0);
 		chan.sendToAll(kickMsg);
 		chan.remove_client((*it)->GetFd());
-		chan.remove_admin((*it)->GetFd());
 	}
 }

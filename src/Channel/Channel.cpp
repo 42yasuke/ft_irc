@@ -38,18 +38,6 @@ void Channel::add_client(Client *newClient) { clients.push_back(newClient); }
 
 void Channel::add_admin(Client *newClient) { admins.push_back(newClient); }
 
-void Channel::remove_client(int fd)
-{
-	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
-	{
-		if ((*it)->GetFd() == fd)
-		{
-			clients.erase(it);
-			break;
-		}
-	}
-}
-
 void Channel::remove_admin(int fd)
 {
 	for (std::vector<Client*>::iterator it = admins.begin(); it != admins.end(); ++it)
@@ -57,6 +45,19 @@ void Channel::remove_admin(int fd)
 		if ((*it)->GetFd() == fd)
 		{
 			admins.erase(it);
+			break;
+		}
+	}
+}
+
+void Channel::remove_client(int fd)
+{
+	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if ((*it)->GetFd() == fd)
+		{
+			clients.erase(it);
+			remove_admin(fd);
 			break;
 		}
 	}

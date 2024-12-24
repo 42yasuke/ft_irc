@@ -95,6 +95,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::kick_cmd,
 			&Server::part_cmd,
 			&Server::quit_cmd,
+			&Server::list_cmd,
 			&Server::JOIN,
 			&Server::Topic,
 			&Server::mode_command
