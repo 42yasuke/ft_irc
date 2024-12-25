@@ -93,5 +93,8 @@
 # define ERR_TOOMANYTARGETS(nickname) (":" + nickname + " :too many targets" + BN )
 # define RPL_PART(nickname, channel, reason) (":" + nickname + " PART #" + channel + " " + reason + BN)
 # define RPL_QUIT(nickname, reason) (":" + nickname + " QUIT :" + reason + BN)
+# define RPL_LISTSTART(nickname) (":" + nickname + " 321 :Channel :Users Name" + BN)
+# define RPL_LIST(nickname, channel, clientsnumber, topic) (":" + nickname + " LIST #" + channel + " " + clientsnumber + " :" + topic + BN)
+# define RPL_LISTEND(nickname) (":" + nickname + " 323 :End of /LIST" + BN)
 
 #endif

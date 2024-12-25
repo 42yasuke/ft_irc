@@ -30,11 +30,11 @@ Client *Server::GetClient(std::string nickname)
 size_t	Server::GetChan(std::string chanName)
 {
 	size_t	i = 0;
-	bool	flag = false;
-	while (i < this->channels.size() && !flag)
+	while (i < this->channels.size())
 	{
 		if (this->channels[i].GetName() == chanName)
 			return i;
+		i++;
 	}
 	return INT_MAX;
 }
