@@ -71,6 +71,7 @@ class Server
 		void	list_cmd(int fd, std::string cmd);
 		void	topic_cmd(int fd, std::string cmd);
 		void	mode_cmd(int fd, std::string cmd);
+		void	join_cmd(int fd, std::string cmd);
 
 		/* ******************** Display Methods ******************** */
 		void	ft_display(void);

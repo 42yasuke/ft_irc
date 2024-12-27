@@ -100,8 +100,8 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::list_cmd,
 			&Server::topic_cmd,
 			&Server::mode_cmd,
-			&Server::JOIN
+			&Server::join_cmd
 		};
-		this->ptr_cmd[cmd_type](fd, cmd);
+		(this->*ptr_cmd[cmd_type])(fd, cmd);
 	}
 }
