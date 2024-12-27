@@ -51,6 +51,8 @@
 # define MODE_O 3
 # define MODE_L 4
 
+#define MAX_MODE_L 100
+
 # define PORT_AUTORISAT_MIN 1024
 # define PORT_AUTORISAT_MAX 65535
 
@@ -106,5 +108,6 @@
 # define RPL_LISTSTART(nickname) (":" + nickname + " 321 :Channel :Users Name" + BN)
 # define RPL_LIST(nickname, channel, clientsnumber, topic) (":" + nickname + " LIST #" + channel + " " + clientsnumber + " :" + topic + BN)
 # define RPL_LISTEND(nickname) (":" + nickname + " 323 :End of /LIST" + BN)
+# define RPL_MODE(nickname, channel, mode, param) (":" + nickname + " MODE #" + channel + " " + mode + " " + param + BN)
 
 #endif

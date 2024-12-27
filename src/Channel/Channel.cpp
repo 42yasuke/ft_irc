@@ -38,7 +38,7 @@ void Channel::add_client(Client *newClient) { clients.push_back(newClient); }
 
 void Channel::add_admin(Client *newClient) { admins.push_back(newClient); }
 
-void Channel::remove_admin(int fd)
+void Channel::rmAdmin(int fd)
 {
 	for (std::vector<Client*>::iterator it = admins.begin(); it != admins.end(); ++it)
 	{
@@ -50,49 +50,15 @@ void Channel::remove_admin(int fd)
 	}
 }
 
-void Channel::remove_client(int fd)
+void Channel::rmClient(int fd)
 {
 	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
 	{
 		if ((*it)->GetFd() == fd)
 		{
 			clients.erase(it);
-			remove_admin(fd);
+			rmAdmin(fd);
 			break;
 		}
 	}
-}
-
-bool Channel::change_clientToAdmin(std::string &nick)
-{
-	size_t i = 0;
-	for (; i < clients.size(); i++)
-	{
-		if (clients[i]->GetNickName() == nick)
-			break;
-	}
-	if (i < clients.size())
-	{
-		admins.push_back(clients[i]);
-		clients.erase(i + clients.begin());
-		return true;
-	}
-	return false;
-}
-
-bool Channel::change_adminToClient(std::string &nick)
-{
-	size_t i = 0;
-	for (; i < admins.size(); i++)
-	{
-		if (admins[i]->GetNickName() == nick)
-			break;
-	}
-	if (i < admins.size())
-	{
-		clients.push_back(admins[i]);
-		admins.erase(i + admins.begin());
-		return true;
-	}
-	return false;
 }

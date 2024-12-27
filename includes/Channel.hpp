@@ -42,6 +42,7 @@ class Channel
 		std::string getModes(void);
 		std::string clientChannel_list(void);
 		Client *get_client(int fd);
+		Client *get_client(std::string nick);
 		Client *get_admin(int fd);
 		Client *GetClientInChannel(std::string name);
 
@@ -52,16 +53,14 @@ class Channel
 		void SetPassword(std::string password);
 		void SetName(std::string name);
 		void SetTime(std::string time);
-		void set_topicRestriction(bool value);
+		void setTopicRestriction(bool value);
 		void setModeAtindex(size_t index, bool mode);
 
 		/* ******************** Methods ******************** */
 		void add_client(Client *newClient);
 		void add_admin(Client *newClient);
-		void remove_client(int fd);
-		void remove_admin(int fd);
-		bool change_clientToAdmin(std::string& nick);
-		bool change_adminToClient(std::string& nick);
+		void rmClient(int fd);
+		void rmAdmin(int fd);
 
 		/* ******************** SenToAll ******************** */
 		void sendToAll(std::string rpl1);

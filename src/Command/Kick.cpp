@@ -81,6 +81,6 @@ void	Server::kick_cmd(int fd, std::string cmd)
 		std::string kickMsg = ":" + cli->getHostname() + " KICK #" + chanName + " " + (*it)->GetNickName() + " :" + reason + BN;
 		send((*it)->GetFd(), kickMsg.c_str(), kickMsg.length(), 0);
 		chan.sendToAll(kickMsg);
-		chan.remove_client((*it)->GetFd());
+		chan.rmClient((*it)->GetFd());
 	}
 }

@@ -47,7 +47,7 @@ void	Server::part_cmd(int fd, std::string cmd)
 		if (!chan.get_client(fd))
 			{_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chan.GetName()), fd); continue;}
 		chan.sendToAll(RPL_PART(cli->GetNickName(), chan.GetName(), reason));
-		chan.remove_client(fd);
+		chan.rmClient(fd);
 		if (!chan.GetClientsNumber())
 			this->RemoveChan(chan.GetName());
 	}

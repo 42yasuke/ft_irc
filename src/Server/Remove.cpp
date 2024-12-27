@@ -9,7 +9,7 @@ void	RmThisFdFromAllChans(int fd, std::string reason)
 	for (std::vector<Channel>::iterator it = serv->GetAllChans().begin(); it != serv->GetAllChans().end(); it++)
 	{
 		if (it->get_client(fd))
-			{it->remove_client(fd); it->sendToAll(RPL_QUIT(cli->GetNickName(), reason));}
+			{it->rmClient(fd); it->sendToAll(RPL_QUIT(cli->GetNickName(), reason));}
 	}
 }
 

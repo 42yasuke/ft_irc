@@ -79,6 +79,16 @@ Client *Channel::get_client(int fd)
 	return NULL;
 }
 
+Client *Channel::get_client(std::string nick)
+{
+	for (std::vector<Client*>::iterator it = clients.begin(); it != clients.end(); ++it)
+	{
+		if ((*it)->GetNickName() == nick)
+			return (*it);
+	}
+	return NULL;
+}
+
 Client *Channel::get_admin(int fd)
 {
 	for (std::vector<Client*>::iterator it = admins.begin(); it != admins.end(); ++it)
@@ -117,7 +127,7 @@ void Channel::SetPassword(std::string password) { this->password = password; }
 
 void Channel::SetName(std::string name) { this->name = name; }
 
-void Channel::set_topicRestriction(bool value) { this->topic_restriction = value; }
+void Channel::setTopicRestriction(bool value) { this->topic_restriction = value; }
 
 void Channel::setModeAtindex(size_t index, bool mode) { modes[index].second = mode; }
 

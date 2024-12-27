@@ -6,7 +6,7 @@ bool	isValidChan(int fd, std::string &chanName)
 	if (!serv)
 		ft_error("getServ failed");
 	Client	*cli = serv->GetClient(fd);
-	if (!chanName.empty())
+	if (chanName.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	if (chanName[0] != '#')
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
@@ -16,21 +16,127 @@ bool	isValidChan(int fd, std::string &chanName)
 	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName)];
 	if (!chan.get_client(fd))
 		return (_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chanName), fd), false);
-	if (!chan.get_client(fd))
+	if (!chan.get_admin(fd))
 		return (_sendResponse(ERR_CHANOPRIVSNEEDED(cli->GetNickName(), chanName), fd), false);
 	return (true);
 }
 
-bool	isGoodParam(int fd, std::string &chanName, std::string &mode, std::string &param)
+bool	isValidMode(int fd, std::string &modeStr, std::string &param, Channel &chan)
 {
 	Server	*serv = (Server *)getServ(NULL);
 	if (!serv)
 		ft_error("getServ failed");
 	Client	*cli = serv->GetClient(fd);
+	if (modeStr.empty() || modeStr.size() > 2)
+		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	if (modeStr[0] != '+' && modeStr[0] != '-')
+		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	if (modeStr[1] != 'i' && modeStr[1] != 't' && modeStr[1] != 'k' && modeStr[1] != 'o' && modeStr[1] != 'l')
+		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	if ((modeStr[1] == 'i' || modeStr[1] == 't') && !param.empty())
+		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	if (modeStr[1] == 'l')
+	{
+		if (param.empty() || param.size() > 3)
+			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		for (size_t i = 0; i < param.size(); i++)
+		{
+			if (!isdigit(param[i]))
+				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		}
+		if (atoi(param.c_str()) < chan.GetClientsNumber()|| atoi(param.c_str()) > MAX_MODE_L)
+			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	}
+	if (modeStr[1] == 'k')
+	{
+		if (param.empty())
+			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		for (size_t i = 0; i < param.size(); i++)
+		{
+			if (!isalnum(param[i]))
+				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		}
+	}
+	if (modeStr[1] == 'o')
+	{
+		if (param.empty())
+			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		Client	*cli = serv->GetClient(param);
+		if (!cli)
+			return (_sendResponse(ERR_NOSUCHNICK(param), fd), false);
+		if (!chan.get_client(cli->GetFd()))
+			return (_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chan.GetName()), fd), false);
+	}
+	return (true);
+}
+
+bool	isGoodParam(int fd, std::string &chanName, std::string &modeStr, std::string &param)
+{
+	Server	*serv = (Server *)getServ(NULL);
+	if (!serv)
+		ft_error("getServ failed");
 	if (!isValidChan(fd, chanName))
 		return (false);
-	
+	Client	*cli = serv->GetClient(fd);
+	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName)];
+	if (!isValidMode(fd, modeStr, param, chan))
+		return (false);
 	return (true);
+}
+
+int		giveMode(std::string &modeStr)
+{
+	int	mode = 0;
+	if (modeStr[1] == 'i')
+		mode = MODE_I;
+	if (modeStr[1] == 't')
+		mode = MODE_T;
+	if (modeStr[1] == 'k')
+		mode = MODE_K;
+	if (modeStr[1] == 'o')
+		mode = MODE_O;
+	if (modeStr[1] == 'l')
+		mode = MODE_L;
+	return (mode * 10 + (modeStr[0] == '+'));
+}
+
+void	mod_i(Channel &chan, int flag, std::string param)
+{
+	(void)param;
+	chan.SetInvitOnly(flag);
+}
+
+void	mod_t(Channel &chan, int flag, std::string param)
+{
+	(void)param;
+	chan.setTopicRestriction(flag);
+}
+
+
+void	mod_k(Channel &chan, int flag, std::string param)
+{
+	if (flag)
+		chan.SetPassword(param);
+	else
+		chan.SetPassword("");
+}
+
+void	mod_o(Channel &chan, int flag, std::string param)
+{
+	(void)param;
+	Client	*cli = chan.get_client(param);
+	if (flag)
+		chan.add_admin(cli);
+	else
+		chan.rmAdmin(cli->GetFd());
+}
+
+void	mod_l(Channel &chan, int flag, std::string param)
+{
+	if (flag)
+		chan.SetLimit(atoi(param.c_str()));
+	else
+		chan.SetLimit(MAX_MODE_L);
 }
 
 void	Server::mode_cmd(int fd, std::string cmd)
@@ -46,25 +152,15 @@ void	Server::mode_cmd(int fd, std::string cmd)
 	if (!isGoodParam(fd, chanName, modeStr, param))
 		return ;
 	Channel	chan = this->GetAllChans()[this->GetChan(chanName)];
-	/*faire les modes avec un tableau de fonction*/
-	switch (modeStr[1])
-	{
-		case 'i':
-			mod_i(fd, chanName , modeStr[0], param);
-			break;
-		case 't':
-			mod_t(fd, chanName , modeStr[0], param);
-			break;
-		case 'k':
-			mod_k(fd, chanName , modeStr[0], param);
-			break;
-		case 'o':
-			mod_o(fd, chanName , modeStr[0], param);
-			break;
-		case 'l':
-			mod_l(fd, chanName , modeStr[0], param);
-			break;
-		default:
-			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd));
-	}
+	int	mode = giveMode(modeStr);
+	void (*ptr_mod[])(Channel &, int, std::string) = 
+		{
+			&mod_i,
+			&mod_t,
+			&mod_k,
+			&mod_o,
+			&mod_l,
+		};
+	ptr_mod[mode / 10](chan, mode % 2, param);
+	chan.sendToAll(RPL_MODE(cli->GetNickName(), chan.GetName(), modeStr, param));
 }
