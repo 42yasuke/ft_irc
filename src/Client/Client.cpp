@@ -5,7 +5,6 @@ Client::Client()
 	this->nickname = "";
 	this->username = "";
 	this->fd = -1;
-	this->isOperator = false;
 	this->registered = false;
 	this->buffer = "";
 	this->ipadd = "";

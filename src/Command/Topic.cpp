@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-bool	isGoodParam(int fd, std::string &chanName, std::string &topic)
+bool	isGoodParam(int fd, std::string &chanName, std::string &topic, bool &flag)
 {
 	Server	*serv = (Server*)getServ(NULL);
 	if (!serv)
@@ -14,9 +14,14 @@ bool	isGoodParam(int fd, std::string &chanName, std::string &topic)
 	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName)];
 	if (!chan.get_client(fd))
 		return (_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chanName), fd), false);
-	if (!topic.empty() && chan.GetTopicRestriction() && !chan.get_admin(fd))
+	if (topic.empty())
+		return (true);
+	if (topic[0] != ':')
+		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	topic = topic.substr(1);
+	if (chan.GetTopicRestriction() && !chan.get_admin(fd))
 		return (_sendResponse(ERR_CHANOPRIVSNEEDED(cli->GetNickName(), chanName), fd), false);
-	return (true);
+	return (flag = true, true);
 }
 
 void	Server::topic_cmd(int fd, std::string cmd)
@@ -28,10 +33,11 @@ void	Server::topic_cmd(int fd, std::string cmd)
 	Client	*cli = this->GetClient(fd);
 	if (!bad_param.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd));
-	if (!isGoodParam(fd, chanName, topic))
+	bool	flag = false;
+	if (!isGoodParam(fd, chanName, topic, flag))
 		return ;
 	Channel	chan = this->GetAllChans()[this->GetChan(chanName)];
-	if (!topic.empty())
+	if (flag)
 		{chan.SetTopicName(topic); chan.sendToAll(RPL_TOPICWHOTIME(cli->GetNickName(), chanName, chan.GetTopicName(), chan.GetTime()));}
 	else
 	{

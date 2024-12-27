@@ -7,7 +7,6 @@ class Client
 {
 	private:
 		int fd;
-		bool isOperator;
 		bool registered;
 		std::string nickname;
 		bool logedin;

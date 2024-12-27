@@ -44,6 +44,13 @@
 # define NOTREGISTERED 12
 # define LIST 13
 
+/* ******************** Mode Macro ******************** */
+# define MODE_I 0
+# define MODE_T 1
+# define MODE_K 2
+# define MODE_O 3
+# define MODE_L 4
+
 # define PORT_AUTORISAT_MIN 1024
 # define PORT_AUTORISAT_MAX 65535
 

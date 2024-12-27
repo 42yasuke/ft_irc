@@ -6,14 +6,14 @@ bool	isPortValid(std::string port)
 
 	if (port.empty())
 		return (false);
-	for (char c : port)
+	for (size_t i = 0; i < port.size(); i++)
 	{
-		if (!isdigit(c))
+		if (!isdigit(port[i]))
 			return (false);
 	}
 	if (port.size() > 5 || port.size() < 4)
 		return (false);
-	nb = std::stoi(port);
+	nb = std::atoi(port.c_str());
 	if (nb < PORT_AUTORISAT_MIN || nb > PORT_AUTORISAT_MAX)
 		return (false);
 	return (true);
