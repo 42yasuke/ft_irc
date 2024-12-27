@@ -54,6 +54,8 @@ int	get_cmd_type(std::string &cmd, bool registered)
 		return (INVITE);
 	if (token == "privmsg")
 		return (PRIVMSG);
+	if (token == "list")
+		return (LIST);
 	return (CMDNOTFOUND);
 }
 
@@ -96,8 +98,8 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::part_cmd,
 			&Server::quit_cmd,
 			&Server::list_cmd,
+			&Server::topic_cmd,
 			&Server::JOIN,
-			&Server::Topic,
 			&Server::mode_command
 		};
 		this->ptr_cmd[cmd_type](fd, cmd);

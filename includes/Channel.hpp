@@ -17,6 +17,10 @@ class Channel
 		std::vector<Client*> clients;
 		std::vector<Client*> admins;
 		std::vector<std::pair<char, bool> > modes;
+
+		/* ******************** Setters ******************** */
+		void set_createiontime(void);
+
 	public:
 		Channel();
 		~Channel();
@@ -27,7 +31,7 @@ class Channel
 		bool GetInvitOnly(void);
 		int GetLimit(void);
 		int GetClientsNumber(void);
-		bool Gettopic_restriction(void) const;
+		bool GetTopicRestriction(void) const;
 		bool getModeAtindex(size_t index);
 		bool clientInChannel(std::string &nick);
 		std::string GetTopicName(void);
@@ -50,7 +54,6 @@ class Channel
 		void SetTime(std::string time);
 		void set_topicRestriction(bool value);
 		void setModeAtindex(size_t index, bool mode);
-		void set_createiontime(void);
 
 		/* ******************** Methods ******************** */
 		void add_client(Client *newClient);

@@ -42,6 +42,7 @@
 # define PRIVMSG 10
 # define CMDNOTFOUND 11
 # define NOTREGISTERED 12
+# define LIST 13
 
 # define PORT_AUTORISAT_MIN 1024
 # define PORT_AUTORISAT_MAX 65535
@@ -64,7 +65,9 @@
 # define RPL_JOINMSG(hostname, ipaddress, channel) (":" + hostname + "@" + ipaddress + " JOIN #" + channel + BN)
 # define RPL_NAMREPLY(nickname, channel, clientslist) (": 353 " + nickname + " @ #" + channel + " :" + clientslist + BN)
 # define RPL_ENDOFNAMES(nickname, channel) (": 366 " + nickname + " #" + channel + " :END of /NAMES list" + BN)
-# define RPL_TOPICIS(nickname, channel, topic) (": 332 " + nickname + " #" +channel + " :" + topic + BN)
+# define RPL_NOTOPIC(nickname, channel) (": 331 " + nickname + " #" + channel + " :No topic is set" + BN)
+# define RPL_TOPIC(nickname, channel, topic) (": 332 " + nickname + " #" +channel + " :" + topic + BN)
+# define RPL_TOPICWHOTIME(nickname, channel, topic, timer) (": 333 " + nickname + " #" + channel + " " + topic + " " + timer + BN)
 # define RPL_INVITING(nickname, channel) (": 341 " + nickname + " :has been successfuly invited to #" + channel + BN)
 
 /* ******************** IRC Error Macro ******************** */

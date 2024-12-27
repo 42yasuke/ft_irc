@@ -9,7 +9,7 @@ int Channel::GetClientsNumber(void) { return this->clients.size() + this->admins
 
 std::string Channel::get_creationtime(void) {return created_at;}
 
-bool Channel::Gettopic_restriction() const { return this->topic_restriction; }
+bool Channel::GetTopicRestriction() const { return this->topic_restriction; }
 
 bool Channel::getModeAtindex(size_t index) { return modes[index].second; }
 
@@ -111,7 +111,7 @@ void Channel::SetTime(std::string time) { this->time_creation = time; }
 
 void Channel::SetLimit(int limit) { this->limit = limit; }
 
-void Channel::SetTopicName(std::string topic_name) { this->topic_name = topic_name; }
+void Channel::SetTopicName(std::string topic_name) { this->topic_name = topic_name; this->set_createiontime();}
 
 void Channel::SetPassword(std::string password) { this->password = password; }
 

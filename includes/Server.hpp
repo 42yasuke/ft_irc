@@ -69,6 +69,7 @@ class Server
 		void	part_cmd(int fd, std::string cmd);
 		void	quit_cmd(int fd, std::string cmd);
 		void	list_cmd(int fd, std::string cmd);
+		void	topic_cmd(int fd, std::string cmd);
 
 		/* ******************** Display Methods ******************** */
 		void	ft_display(void);
