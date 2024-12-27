@@ -99,8 +99,8 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::quit_cmd,
 			&Server::list_cmd,
 			&Server::topic_cmd,
-			&Server::JOIN,
-			&Server::mode_command
+			&Server::mode_cmd,
+			&Server::JOIN
 		};
 		this->ptr_cmd[cmd_type](fd, cmd);
 	}

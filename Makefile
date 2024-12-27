@@ -10,7 +10,7 @@ CPP_FILES =	main.cpp \
 			Utils/utils.cpp Utils/send.cpp \
 			Server/Server.cpp Server/Parse.cpp Server/GettersSetters.cpp Server/Remove.cpp \
 			Command/Pass.cpp Command/Nick.cpp Command/User.cpp Command/Privmsg.cpp Command/Invite.cpp Command/Kick.cpp \
-			Command/Part.cpp Command/Quit.cpp Command/List.cpp Command/Topic.cpp \
+			Command/Part.cpp Command/Quit.cpp Command/List.cpp Command/Topic.cpp Command/Mode.cpp \
 			Client/Client.cpp Client/GettersSetters.cpp \
 			Channel/Channel.cpp Channel/GettersSetters.cpp Channel/SendToALL.cpp
 
