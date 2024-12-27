@@ -84,20 +84,18 @@ bool	isGoodParam(int fd, std::string &chanName, std::string &modeStr, std::strin
 	return (true);
 }
 
-int		giveMode(std::string &modeStr)
+int		giveMode(const std::string &modeStr)
 {
-	int	mode = 0;
-	if (modeStr[1] == 'i')
-		mode = MODE_I;
-	if (modeStr[1] == 't')
-		mode = MODE_T;
-	if (modeStr[1] == 'k')
-		mode = MODE_K;
-	if (modeStr[1] == 'o')
-		mode = MODE_O;
-	if (modeStr[1] == 'l')
-		mode = MODE_L;
-	return (mode * 10 + (modeStr[0] == '+'));
+	int mode;
+	switch(modeStr[1]) {
+		case 'i': mode = MODE_I; break;
+		case 't': mode = MODE_T; break;
+		case 'k': mode = MODE_K; break;
+		case 'o': mode = MODE_O; break;
+		case 'l': mode = MODE_L; break;
+		default: return -1;
+	}
+	return mode * 10 + (modeStr[0] == '+');
 }
 
 void	mod_i(Channel &chan, int flag, std::string param)
@@ -145,7 +143,6 @@ void	Server::mode_cmd(int fd, std::string cmd)
 	std::string	chanName, modeStr, param, badParam;
 	std::stringstream	ss(cmd);
 	ss >> chanName >> modeStr >> param >> badParam;
-	int mode = 0;
 	Client	*cli = GetClient(fd);
 	if (!badParam.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd));
