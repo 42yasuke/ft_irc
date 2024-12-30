@@ -18,7 +18,7 @@ std::string	getHisUserName(std::string &cmd, std::string nickName, int fd)
 		return (_sendResponse(ERR_BADNICKNAME(nickName), fd), ret);
 	if (vCmd[2] != "0" || vCmd[3] != "*")
 		return (_sendResponse(ERR_BADPARAM(nickName), fd), ret);
-	for (int i = 0; i < vCmd.size(); i++)
+	for (size_t i = 0; i < vCmd.size(); i++)
 	{
 		ret += vCmd[i] + " ";
 		if (ret.length() > MAX_CHAR)

@@ -14,7 +14,7 @@ bool	isGoodParams(int fd, std::string chanName, std::string kickList, std::strin
 	{
 		reason = reason.substr(1);
 		for (size_t i = 0; i < reason.size(); i++)
-			if (!isalpha(reason[i]) && !reason[i] != ' ')
+			if (!isalpha(reason[i]) && !(reason[i] != ' '))
 				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	}
 	if (serv->GetChan(chanName.substr(1)) == INT_MAX)
@@ -38,7 +38,8 @@ void	ft_fillMykList(int fd, std::string chanName, std::string kickList, std::vec
 	if (!serv)
 		ft_error("getServ failed");
 	Client	*cli = serv->GetClient(fd);
-	Channel	&chan = serv->GetAllChans()[serv->GetChan(chanName)];
+	std::vector<Channel> AllChan = serv->GetAllChans();
+	Channel	&chan = AllChan[serv->GetChan(chanName)];
 	std::istringstream stm(kickList);
 	std::string line;
 	while(std::getline(stm, line, ','))

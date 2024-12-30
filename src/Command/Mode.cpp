@@ -77,7 +77,6 @@ bool	isGoodParam(int fd, std::string &chanName, std::string &modeStr, std::strin
 		ft_error("getServ failed");
 	if (!isValidChan(fd, chanName))
 		return (false);
-	Client	*cli = serv->GetClient(fd);
 	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName)];
 	if (!isValidMode(fd, modeStr, param, chan))
 		return (false);

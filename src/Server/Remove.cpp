@@ -6,7 +6,8 @@ void	RmThisFdFromAllChans(int fd, std::string reason)
 	if (!serv)
 		ft_error("getServ failed");
 	Client *cli = serv->GetClient(fd);
-	for (std::vector<Channel>::iterator it = serv->GetAllChans().begin(); it != serv->GetAllChans().end(); it++)
+	std::vector<Channel> AllChan = serv->GetAllChans();
+	for (std::vector<Channel>::iterator it = AllChan.begin(); it != AllChan.end(); it++)
 	{
 		if (it->get_client(fd))
 			{it->rmClient(fd); it->sendToAll(RPL_QUIT(cli->GetNickName(), reason));}
