@@ -16,7 +16,6 @@ class Channel
 		std::string topic_name;
 		std::vector<Client*> clients;
 		std::vector<Client*> admins;
-		std::vector<std::pair<char, bool> > modes;
 
 		/* ******************** Setters ******************** */
 		void set_createiontime(void);
@@ -39,7 +38,6 @@ class Channel
 		std::string GetName(void);
 		std::string GetTime(void);
 		std::string get_creationtime(void);
-		std::string getModes(void);
 		std::string clientChannel_list(void);
 		Client *get_client(int fd);
 		Client *get_client(std::string nick);
@@ -61,6 +59,7 @@ class Channel
 		void add_admin(Client *newClient);
 		void rmClient(int fd);
 		void rmAdmin(int fd);
+		std::string GetClientList(void);
 
 		/* ******************** SenToAll ******************** */
 		void sendToAll(std::string rpl1);

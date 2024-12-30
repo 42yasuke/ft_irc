@@ -11,8 +11,6 @@ std::string Channel::get_creationtime(void) {return created_at;}
 
 bool Channel::GetTopicRestriction() const { return this->topic_restriction; }
 
-bool Channel::getModeAtindex(size_t index) { return modes[index].second; }
-
 bool Channel::clientInChannel(std::string &nick)
 {
 	for (size_t i = 0; i < clients.size(); i++)
@@ -35,19 +33,6 @@ std::string Channel::GetPassword(void) { return this->password; }
 std::string Channel::GetName(void) { return this->name; }
 
 std::string Channel::GetTime(void) { return this->time_creation; }
-
-std::string Channel::getModes(void)
-{
-	std::string mode;
-	for (size_t i = 0; i < modes.size(); i++)
-	{
-		if (modes[i].first != 'o' && modes[i].second)
-			mode.push_back(modes[i].first);
-	}
-	if (!mode.empty())
-		mode.insert(mode.begin(), '+');
-	return mode;
-}
 
 std::string Channel::clientChannel_list()
 {
@@ -128,8 +113,6 @@ void Channel::SetPassword(std::string password) { this->password = password; }
 void Channel::SetName(std::string name) { this->name = name; }
 
 void Channel::setTopicRestriction(bool value) { this->topic_restriction = value; }
-
-void Channel::setModeAtindex(size_t index, bool mode) { modes[index].second = mode; }
 
 void Channel::set_createiontime()
 {

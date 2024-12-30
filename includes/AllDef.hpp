@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <unistd.h>
 # include <vector>
+# include <map>
 # include <string>
 
 /* ******************** Colors Macro ******************** */
@@ -60,6 +61,9 @@
 # define MAX_CHAR_TRONC 20
 # define MAX_CMD_LENGTH 512
 # define MAX_KICK_LIST 3
+# define MAX_CHAN_NAME 50
+# define MAX_JOIN_CHAN_AT_ONCE 3
+# define MAX_CHAN_NB 10
 
 # define BN "\n"
 # define SP " "
@@ -71,13 +75,15 @@
 # define RPL_CHANNELMODES(nickname, channel, modes) (": 324 " + nickname + " #" + channel + " " + modes + BN)
 # define RPL_CHANGEMODE(hostname, channel, mode, arguments) (":" + hostname + " MODE #" + channel + " " + mode + " " + arguments + BN)
 # define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + BN)
-# define RPL_JOINMSG(hostname, ipaddress, channel) (":" + hostname + "@" + ipaddress + " JOIN #" + channel + BN)
-# define RPL_NAMREPLY(nickname, channel, clientslist) (": 353 " + nickname + " @ #" + channel + " :" + clientslist + BN)
-# define RPL_ENDOFNAMES(nickname, channel) (": 366 " + nickname + " #" + channel + " :END of /NAMES list" + BN)
 # define RPL_NOTOPIC(nickname, channel) (": 331 " + nickname + " #" + channel + " :No topic is set" + BN)
 # define RPL_TOPIC(nickname, channel, topic) (": 332 " + nickname + " #" +channel + " :" + topic + BN)
 # define RPL_TOPICWHOTIME(nickname, channel, topic, timer) (": 333 " + nickname + " #" + channel + " " + topic + " " + timer + BN)
 # define RPL_INVITING(nickname, channel) (": 341 " + nickname + " :has been successfuly invited to #" + channel + BN)
+# define RPL_LISTSTART(nickname) (":" + nickname + " 321 :Channel :Users Name" + BN)
+# define RPL_LIST(nickname, channel, clientsnumber, topic) (":" + nickname + " LIST #" + channel + " " + clientsnumber + " :" + topic + BN)
+# define RPL_LISTEND(nickname) (":" + nickname + " 323 :End of /LIST" + BN)
+# define RPL_NAMREPLY(nickname, channel, clientslist) (": 353 " + nickname + " @ #" + channel + " :" + clientslist + BN)
+# define RPL_ENDOFNAMES(nickname, channel) (": 366 " + nickname + " #" + channel + " :END of /NAMES list" + BN)
 
 /* ******************** IRC Error Macro ******************** */
 # define ERR_INVALIDMODEPARM(channel, mode) (": 696 #" + channel + " Invalid mode parameter. " + mode + BN)
@@ -96,18 +102,22 @@
 # define ERR_NOTONCHANNEL(nickname, channel) (": 442 " + nickname + " #" + channel + " :You're not on that channel" + BN)
 # define ERR_CHANOPRIVSNEEDED(nickname, channel) (": 482 " + nickname + " #" + channel + " :You're not channel operator" + BN)
 # define ERR_USERONCHANNEL(nickname, channel) (": 443 " + nickname + " #" + channel + " :is already on channel" + BN)
+# define ERR_INVITEONLYCHAN(nickname, channel) (": 473 " + nickname + " #" + channel + " :You're not invited to this channel (+i)" + BN)
+# define ERR_CHANNELISFULL(nickname, channel) (": 471 " + nickname + " #" + channel + " :Cannot join channel (+l)" + BN)
+# define ERR_INCORPASS(nickname) (": 464 " + nickname + " :Password incorrect !" + BN )
+# define ERR_USERONCHANNEL(nickname, channel) (": 443 " + nickname + " #" + channel + " :is already on channel" + BN)
+# define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + " :You have joined too many channels" + BN)
 
 /* ******************** Personal Macro ******************** */
-# define RPL_INVITED(nickname, channel) (": " + nickname + " :invite you to #" + channel + BN)
+# define RPL_INVITED(nickname, channel) (":" + nickname + " :invite you to #" + channel + BN)
 # define ERR_MAXCMDLENGTH(cmd) (":" + cmd + " :command too long" + BN )
 # define ERR_BADNICKNAME(nickname) (":" + nickname + " :bad nickname given" + BN )
 # define ERR_BADPARAM(nickname) (":" + nickname + " :bad parameters given" + BN )
 # define ERR_TOOMANYTARGETS(nickname) (":" + nickname + " :too many targets" + BN )
 # define RPL_PART(nickname, channel, reason) (":" + nickname + " PART #" + channel + " " + reason + BN)
 # define RPL_QUIT(nickname, reason) (":" + nickname + " QUIT :" + reason + BN)
-# define RPL_LISTSTART(nickname) (":" + nickname + " 321 :Channel :Users Name" + BN)
-# define RPL_LIST(nickname, channel, clientsnumber, topic) (":" + nickname + " LIST #" + channel + " " + clientsnumber + " :" + topic + BN)
-# define RPL_LISTEND(nickname) (":" + nickname + " 323 :End of /LIST" + BN)
 # define RPL_MODE(nickname, channel, mode, param) (":" + nickname + " MODE #" + channel + " " + mode + " " + param + BN)
+# define RPL_JOIN(nickname, channel) (":" + nickname + " JOIN #" + channel + BN)
+# define ERR_SERVERFULL_CHAN(nickname) (":" + nickname + " :Server is full, no more channels can be created" + BN)
 
 #endif
