@@ -92,6 +92,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::pass_cmd,
 			&Server::nick_cmd,
 			&Server::user_cmd,
+			&Server::quit_cmd,
 			&Server::kick_cmd,
 			&Server::join_cmd,
 			&Server::topic_cmd,
@@ -99,7 +100,6 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::part_cmd,
 			&Server::invite_cmd,
 			&Server::privmsg_cmd,
-			&Server::quit_cmd,
 			&Server::list_cmd
 		};
 		(this->*ptr_cmd[cmd_type])(fd, cmd);

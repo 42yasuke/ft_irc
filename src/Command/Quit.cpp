@@ -20,7 +20,7 @@ bool	isGoodParams(int fd, std::string reason)
 void	Server::quit_cmd(int fd, std::string cmd)
 {
 	std::string reason = cmd.substr(4);
-	while (!reason.empty() && reason[0] == ' ')
+	while (!reason.empty() && isspace(reason[0]))
 		reason = reason.substr(1);
 	if (!isGoodParams(fd, reason))
 		return ;

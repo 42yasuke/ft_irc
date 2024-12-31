@@ -31,12 +31,12 @@ void Server::nick_cmd(int fd, std::string cmd)
 	cmd = cmd.substr(4);
 	size_t pos = cmd.find_first_not_of("\t\v ");
 	if(pos == std::string::npos)
-		{_sendResponse(ERR_NEEDMOREPARAMS(std::string("unknown")), fd); return;}
+		{_sendResponse(ERR_NONICKNAMEGIVEN(std::string("")), fd); return;}
 	cmd = cmd.substr(pos);
 	if (!is_validNickname(cmd))
-		{_sendResponse(ERR_ERRONEUSNICK(cmd), fd); return;}
+		{_sendResponse(ERR_ERRONEUSNICKNAME(cmd), fd); return;}
 	else if (nickNameInUse(cmd, this->clients))
-		{_sendResponse(ERR_NICKINUSE(cmd), fd); return;}
+		{_sendResponse(ERR_NICKNAMEINUSE(cmd), fd); return;}
 	else
 	{
 		Client *cli = GetClient(fd);
