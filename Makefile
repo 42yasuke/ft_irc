@@ -1,6 +1,6 @@
 CPP = c++
 
-CPP_FLAGS = -MMD -Wall -Wextra -Werror -std=c++98 -c
+CPP_FLAGS = -MMD -Wall -Wextra -Werror -std=c++98 -c -g
 
 RM = rm -f
 

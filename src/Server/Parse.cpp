@@ -36,10 +36,10 @@ int	get_cmd_type(std::string &cmd, bool registered)
 		return (NICK);
 	if (token == "user")
 		return (USER);
-	if (token == "quit")
-		return (QUIT);
 	if (!registered)
 		return (NOTREGISTERED);
+	if (token == "quit")
+		return (QUIT);
 	if (token == "kick")
 		return (KICK);
 	if (token == "join")
@@ -82,7 +82,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 	if (cmd_type == CMDNOTFOUND)
 		_sendResponse(ERR_CMDNOTFOUND(GetClient(fd)->GetNickName(), splitBySpace(cmd)[0]), fd);
 	else if (cmd_type == NOTREGISTERED)
-		_sendResponse(ERR_NOTREGISTERED(std::string("*")), fd);
+		_sendResponse(ERR_NOTREGISTERED(std::string("")), fd);
 	else
 	{
 		if (cmd.size() > MAX_CMD_LENGTH)
@@ -92,15 +92,15 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::pass_cmd,
 			&Server::nick_cmd,
 			&Server::user_cmd,
-			&Server::privmsg_cmd,
-			&Server::invite_cmd,
 			&Server::kick_cmd,
-			&Server::part_cmd,
-			&Server::quit_cmd,
-			&Server::list_cmd,
+			&Server::join_cmd,
 			&Server::topic_cmd,
 			&Server::mode_cmd,
-			&Server::join_cmd
+			&Server::part_cmd,
+			&Server::invite_cmd,
+			&Server::privmsg_cmd,
+			&Server::quit_cmd,
+			&Server::list_cmd
 		};
 		(this->*ptr_cmd[cmd_type])(fd, cmd);
 	}

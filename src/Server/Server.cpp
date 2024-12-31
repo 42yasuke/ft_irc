@@ -75,8 +75,7 @@ void Server::accept_new_client()
 	socklen_t len = sizeof(cliadd);
 	int incofd = accept(server_fdsocket, (sockaddr *)&(cliadd), &len);
 	if (incofd == -1)
-	{
-		std::cout << "accept() failed" << std::endl; return;}
+		{std::cout << "accept() failed" << std::endl; return;}
 	if (fcntl(incofd, F_SETFL, O_NONBLOCK) == -1)
 		{std::cout << "fcntl() failed" << std::endl; return;}
 	new_cli.fd = incofd;
@@ -105,10 +104,7 @@ void Server::reciveNewData(int fd)
 	Client *cli = GetClient(fd);
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
 	if(bytes <= 0)
-	{
-		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
 		RemoveClient(fd, SP);
-	}
 	else
 	{
 		cli->setBuffer(buff);

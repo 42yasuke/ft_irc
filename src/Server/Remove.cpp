@@ -16,11 +16,17 @@ void	RmThisFdFromAllChans(int fd, std::string reason)
 
 void	Server::RemoveClient(int fd, std::string reason)
 {
-	for (size_t i = 0; i < this->clients.size(); i++)
+	size_t i = 0;
+	while (i < this->fds.size())
+	{
+		if (this->fds[i].fd == fd)
+			{this->fds.erase(this->fds.begin() + i);break;}
+		i++;
+	}
+	for (i = 0; i < this->clients.size(); i++)
 	{
 		if (this->clients[i]->GetFd() == fd)
 		{
-			this->fds.erase(this->fds.begin() + i);
 			RmThisFdFromAllChans(fd, reason);
 			this->clients.erase(this->clients.begin() + i);
 			delete this->clients[i];

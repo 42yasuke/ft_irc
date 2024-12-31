@@ -35,7 +35,7 @@ void	Server::user_cmd(int fd, std::string cmd)
 	std::vector<std::string> splited_cmd = splitBySpace(cmd);
 	Client *cli = GetClient(fd);
 	if(!cli || !cli->getRegistered())
-		return (_sendResponse(ERR_NOTREGISTERED(std::string("*")), fd));
+		return (_sendResponse(ERR_NOTREGISTERED(std::string("")), fd));
 	if(splited_cmd.size() != 5)
 		return (_sendResponse(ERR_NEEDMOREPARAMS(cli->GetNickName()), fd));
 	if (!cli->GetUserName().empty())
