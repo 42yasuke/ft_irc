@@ -1,18 +1,5 @@
 #include "Server.hpp"
 
-std::vector<Channel> getChanList(std::string chanList)
-{
-	Server *serv = (Server*)getServ(NULL);
-	if (!serv)
-		ft_error("getServ failed");
-	std::vector<Channel> chanList_vec;
-	std::stringstream ss(chanList);
-	std::string chan;
-	while (std::getline(ss, chan, ','))
-		chanList_vec.push_back(serv->GetAllChans()[serv->GetChan(chan)]);
-	return (chanList_vec);
-}
-
 std::vector<std::string> getStrList(std::string strList)
 {
 	std::vector<std::string> strList_vec;
@@ -71,8 +58,8 @@ bool	isGoodParams(int fd, std::string chanList, std::string chanPw, std::map<std
 	Client	*cli = serv->GetClient(fd);
 	std::vector<std::string> chanList_vec = getStrList(chanList);
 	std::vector<std::string> chanPw_vec = getStrList(chanPw);
-	if (chanList_vec.size() != chanPw_vec.size())
-		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	if (chanList_vec.empty())
+		return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanList), fd), false);
 	if (chanList_vec.size() > MAX_JOIN_CHAN_AT_ONCE)
 		return (_sendResponse(ERR_TOOMANYCHANNELS(cli->GetNickName()), fd), false);
 	for (size_t i = 0; i < chanList_vec.size(); i++)
@@ -81,7 +68,12 @@ bool	isGoodParams(int fd, std::string chanList, std::string chanPw, std::map<std
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	}
 	for (size_t i = 0; i < chanList_vec.size(); i++)
-		chanName_pw.insert(std::make_pair(chanList_vec[i].substr(1), chanPw_vec[i]));
+	{
+		std::string pw = "";
+		if (chanPw_vec.size() > i)
+			pw = chanPw_vec[i];
+		chanName_pw.insert(std::make_pair(chanList_vec[i].substr(1), pw));
+	}
 	for (std::map<std::string, std::string>::iterator it = chanName_pw.begin(); it != chanName_pw.end(); it++)
 	{
 		if (!isValidChan(fd, it->first, it->second))

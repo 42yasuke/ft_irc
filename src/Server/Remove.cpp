@@ -28,8 +28,8 @@ void	Server::RemoveClient(int fd, std::string reason)
 		if (this->clients[i]->GetFd() == fd)
 		{
 			RmThisFdFromAllChans(fd, reason);
-			this->clients.erase(this->clients.begin() + i);
 			delete this->clients[i];
+			this->clients.erase(this->clients.begin() + i);
 			break;
 		}
 	}
