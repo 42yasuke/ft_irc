@@ -31,7 +31,6 @@ class Channel
 		int GetLimit(void);
 		int GetClientsNumber(void);
 		bool GetTopicRestriction(void) const;
-		bool getModeAtindex(size_t index);
 		bool clientInChannel(std::string &nick);
 		std::string GetTopicName(void);
 		std::string GetPassword(void);
@@ -52,7 +51,6 @@ class Channel
 		void SetName(std::string name);
 		void SetTime(std::string time);
 		void setTopicRestriction(bool value);
-		void setModeAtindex(size_t index, bool mode);
 
 		/* ******************** Methods ******************** */
 		void add_client(Client *newClient);

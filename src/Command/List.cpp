@@ -8,15 +8,15 @@ bool	isGoodParams(int fd, std::string chanList, std::vector<Channel> &cList)
 	Client	*cli = serv->GetClient(fd);
 	if (!chanList.empty())
 	{
-		cList.clear();
 		std::string chanName;
 		std::stringstream ss(chanList);
 		while (std::getline(ss, chanName, ','))
 		{
 			if (chanName[0] != '#')
 				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+			chanName.erase(0, 1);
 			if (serv->GetChan(chanName) == INT_MAX)
-				{_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName), fd); continue;};
+				return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName.substr(1)), fd), false);
 			cList.push_back(serv->GetAllChans()[serv->GetChan(chanName)]);
 		}
 	}
@@ -27,7 +27,7 @@ void	Server::list_cmd(int fd, std::string cmd)
 {
 	cmd = cmd.substr(4);
 	std::string chanList;
-	std::vector<Channel> cList = this->GetAllChans();
+	std::vector<Channel> cList;
 	std::stringstream ss(cmd);
 	ss >> chanList;
 	if (!isGoodParams(fd, chanList, cList))

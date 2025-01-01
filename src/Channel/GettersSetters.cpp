@@ -5,7 +5,7 @@ bool Channel::GetInvitOnly(void) { return this->inviteOnly;}
 
 int Channel::GetLimit(void) { return this->limit; }
 
-int Channel::GetClientsNumber(void) { return this->clients.size() + this->admins.size(); }
+int Channel::GetClientsNumber(void) { return this->clients.size(); }
 
 std::string Channel::get_creationtime(void) {return created_at;}
 

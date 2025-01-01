@@ -7,7 +7,6 @@
 # include <cstdlib>
 # include <cstring>
 # include <ctime>
-//# include <cstdint>
 # include <climits>
 # include <fcntl.h>
 # include <fstream>
