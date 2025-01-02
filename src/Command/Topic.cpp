@@ -8,18 +8,18 @@ bool	isGoodParam(int fd, std::string &chanName, std::string &topic, bool &flag)
 	Client	*cli = serv->GetClient(fd);
 	if (chanName.empty() || chanName[0] != '#')
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-	if (serv->GetChan(chanName.substr(1)) == INT_MAX)
+	if (serv->GetChanID(chanName.substr(1)) == INT_MAX)
 		return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName), fd), false);
 	chanName = chanName.substr(1);
-	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName)];
-	if (!chan.get_client(fd))
+	Channel	*chan = serv->GetChan(chanName);
+	if (!chan->get_client(fd))
 		return (_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chanName), fd), false);
 	if (topic.empty())
 		return (true);
 	if (topic[0] != ':')
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	topic = topic.substr(1);
-	if (chan.GetTopicRestriction() && !chan.get_admin(fd))
+	if (chan->GetTopicRestriction() && !chan->get_admin(fd))
 		return (_sendResponse(ERR_CHANOPRIVSNEEDED(cli->GetNickName(), chanName), fd), false);
 	return (flag = true, true);
 }
@@ -36,14 +36,17 @@ void	Server::topic_cmd(int fd, std::string cmd)
 	bool	flag = false;
 	if (!isGoodParam(fd, chanName, topic, flag))
 		return ;
-	Channel	chan = this->GetAllChans()[this->GetChan(chanName)];
+	Channel	*chan = this->GetChan(chanName);
 	if (flag)
-		{chan.SetTopicName(topic); chan.sendToAll(RPL_TOPICWHOTIME(cli->GetNickName(), chanName, chan.GetTopicName(), chan.GetTime()));}
+	{
+		chan->SetTopicName(topic);
+		chan->sendToAll(RPL_TOPICWHOTIME(cli->GetNickName(), chanName, chan->GetTopicName(), chan->GetTime()));
+	}
 	else
 	{
-		if (chan.GetTopicName().empty())
+		if (chan->GetTopicName().empty())
 			_sendResponse(RPL_NOTOPIC(cli->GetNickName(), chanName), fd);
 		else
-			_sendResponse(RPL_TOPIC(cli->GetNickName(), chanName, chan.GetTopicName()), fd);
+			_sendResponse(RPL_TOPIC(cli->GetNickName(), chanName, chan->GetTopicName()), fd);
 	}
 }

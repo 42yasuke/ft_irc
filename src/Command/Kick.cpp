@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-bool	isGoodParams(int fd, std::string chanName, std::string kickList, std::string reason)
+bool	isGoodParams(int fd, std::string &chanName, std::string &kickList, std::string &reason)
 {
 	Server	*serv = (Server*)getServ(NULL);
 	if (!serv)
@@ -8,20 +8,23 @@ bool	isGoodParams(int fd, std::string chanName, std::string kickList, std::strin
 	Client	*cli = serv->GetClient(fd);
 	if (chanName.empty() || kickList.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-	if (chanName[0] != '#' || (!reason.empty() && reason[0] != ':'))
+	if (chanName[0] != '#')
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+	chanName.erase(0, 1);
 	if (!reason.empty())
 	{
+		if (reason[0] != ':')
+			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		reason = reason.substr(1);
 		for (size_t i = 0; i < reason.size(); i++)
 			if (!isalpha(reason[i]) && !(reason[i] != ' '))
 				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	}
-	if (serv->GetChan(chanName.substr(1)) == INT_MAX)
-		return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName.substr(1)), fd), false);
-	Channel	chan = serv->GetAllChans()[serv->GetChan(chanName.substr(1))];
-	if (chan.get_admin(fd) != cli)
-		return (_sendResponse(ERR_CHANOPRIVSNEEDED(cli->GetNickName(), chanName.substr(1)), fd), false);
+	if (serv->GetChanID(chanName) == INT_MAX)
+		return (_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName), fd), false);
+	Channel	*chan = serv->GetChan(chanName);
+	if (chan->get_admin(fd) != cli)
+		return (_sendResponse(ERR_CHANOPRIVSNEEDED(cli->GetNickName(), chanName), fd), false);
 	size_t i = 0;
 	while (i < kickList.size())
 	{
@@ -32,14 +35,13 @@ bool	isGoodParams(int fd, std::string chanName, std::string kickList, std::strin
 	return(true);
 }
 
-void	ft_fillMykList(int fd, std::string chanName, std::string kickList, std::vector<Client*> &kList)
+void	ft_fillMykList(int fd, std::string &chanName, std::string &kickList, std::vector<Client*> &kList)
 {
 	Server	*serv = (Server*)getServ(NULL);
 	if (!serv)
 		ft_error("getServ failed");
 	Client	*cli = serv->GetClient(fd);
-	std::vector<Channel> AllChan = serv->GetAllChans();
-	Channel	&chan = AllChan[serv->GetChan(chanName)];
+	Channel	*chan = serv->GetChan(chanName);
 	std::istringstream stm(kickList);
 	std::string line;
 	while(std::getline(stm, line, ','))
@@ -47,7 +49,7 @@ void	ft_fillMykList(int fd, std::string chanName, std::string kickList, std::vec
 		Client	*tmp = serv->GetClient(line);
 		if (!tmp)
 			{_sendResponse(ERR_NOSUCHNICK(line), fd); continue;}
-		if (!chan.GetClientInChannel(line))
+		if (!chan->GetClientInChannel(line))
 			{_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chanName), fd); continue;}
 		kList.push_back(tmp);
 	}
@@ -76,12 +78,12 @@ void	Server::kick_cmd(int fd, std::string cmd)
 	ft_fillMykList(fd, chanName, kickList, kList);
 
 	Client	*cli = GetClient(fd);
-	Channel	chan = this->GetAllChans()[this->GetChan(chanName)];
+	Channel	*chan = this->GetChan(chanName);
 	for (std::vector<Client*>::iterator it = kList.begin(); it != kList.end(); ++it)
 	{
 		std::string kickMsg = ":" + cli->getHostname() + " KICK #" + chanName + " " + (*it)->GetNickName() + " :" + reason + BN;
 		send((*it)->GetFd(), kickMsg.c_str(), kickMsg.length(), 0);
-		chan.sendToAll(kickMsg);
-		chan.rmClient((*it)->GetFd());
+		chan->sendToAll(kickMsg);
+		chan->rmClient((*it)->GetFd());
 	}
 }

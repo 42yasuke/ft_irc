@@ -27,19 +27,29 @@ Client *Server::GetClient(std::string nickname)
 	return (NULL);
 }
 
-size_t	Server::GetChan(std::string chanName)
+size_t	Server::GetChanID(std::string chanName)
 {
 	size_t	i = 0;
 	while (i < this->channels.size())
 	{
-		if (this->channels[i].GetName() == chanName)
+		if (this->channels[i]->GetName() == chanName)
 			return i;
 		i++;
 	}
 	return INT_MAX;
 }
 
-std::vector<Channel>	Server::GetAllChans(void) { return this->channels; }
+Channel	*Server::GetChan(std::string chanName)
+{
+	for (size_t i = 0; i < this->channels.size(); i++)
+	{
+		if (this->channels[i]->GetName() == chanName)
+			return (this->channels[i]);
+	}
+	return NULL;
+}
+
+std::vector<Channel*>	Server::GetAllChans(void) { return this->channels;}
 
 /* ******************** Setters ******************** */
 void Server::SetFd(int fd) { this->server_fdsocket = fd; }
@@ -50,7 +60,7 @@ void Server::SetPassword(std::string password) { this->password = password; }
 
 void Server::AddClient(Client *newClient) { this->clients.push_back(newClient); }
 
-void Server::AddChannel(Channel newChannel) { this->channels.push_back(newChannel); }
+void Server::AddChannel(Channel *newChannel) { this->channels.push_back(newChannel); }
 
 void Server::AddFds(pollfd newFd) { this->fds.push_back(newFd); }
 

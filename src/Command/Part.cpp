@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-bool isGoodParams(int fd, std::string chanList, std::vector<Channel> &cList, std::string reason)
+bool isGoodParams(int fd, std::string chanList, std::vector<Channel*> &cList, std::string reason)
 {
 	Server *serv = (Server*)getServ(NULL);
 	if (!serv)
@@ -21,9 +21,9 @@ bool isGoodParams(int fd, std::string chanList, std::vector<Channel> &cList, std
 	{
 		if (chanName[0] != '#')
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-		if (serv->GetChan(chanName) == INT_MAX)
+		if (serv->GetChanID(chanName) == INT_MAX)
 			{_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName), fd); continue;};
-		cList.push_back(serv->GetAllChans()[serv->GetChan(chanName)]);
+		cList.push_back(serv->GetChan(chanName));
 	}
 	return (cList.size() > 0);
 }
@@ -32,7 +32,7 @@ void	Server::part_cmd(int fd, std::string cmd)
 {
 	cmd = cmd.substr(4);
 	std::string chanList, reason;
-	std::vector<Channel> cList;
+	std::vector<Channel*> cList;
 	std::stringstream ss(cmd);
 	ss >> chanList;
 	std::getline(ss, reason);
@@ -41,14 +41,14 @@ void	Server::part_cmd(int fd, std::string cmd)
 	if (!isGoodParams(fd, chanList, cList, reason))
 		return ;
 	Client	*cli = GetClient(fd);
-	for (std::vector<Channel>::iterator it = cList.begin(); it != cList.end(); ++it)
+	for (std::vector<Channel*>::iterator it = cList.begin(); it != cList.end(); ++it)
 	{
-		Channel &chan = *it;
-		if (!chan.get_client(fd))
-			{_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chan.GetName()), fd); continue;}
-		chan.sendToAll(RPL_PART(cli->GetNickName(), chan.GetName(), reason));
-		chan.rmClient(fd);
-		if (!chan.GetClientsNumber())
-			this->RemoveChan(chan.GetName());
+		Channel *chan = *it;
+		if (!chan->get_client(fd))
+			{_sendResponse(ERR_NOTONCHANNEL(cli->GetNickName(), chan->GetName()), fd); continue;}
+		chan->sendToAll(RPL_PART(cli->GetNickName(), chan->GetName(), reason));
+		chan->rmClient(fd);
+		if (!chan->GetClientsNumber())
+			this->RemoveChan(chan->GetName());
 	}
 }

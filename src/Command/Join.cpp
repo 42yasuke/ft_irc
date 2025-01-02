@@ -16,8 +16,8 @@ bool	isValidChan(int fd, std::string chanName, std::string chanPw)
 	if (!serv)
 		ft_error("getServ failed");
 	Client	*cli = serv->GetClient(fd);
-	Channel chan;
-	if (serv->GetChan(chanName) == INT_MAX)
+	Channel* chan = NULL;
+	if (serv->GetChanID(chanName) == INT_MAX)
 	{
 		if (chanName.empty() || chanName.size() > MAX_CHAN_NAME)
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
@@ -26,25 +26,28 @@ bool	isValidChan(int fd, std::string chanName, std::string chanPw)
 			if (!isprint(chanPw[i]))
 				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		}
-		chan.SetName(chanName);
-		chan.SetPassword(chanPw);
+		chan = new Channel();
+		if (!chan)
+			ft_error("new Channel failed");
+		chan->SetName(chanName);
+		chan->SetPassword(chanPw);
 		if (serv->GetAllChans().size() == MAX_CHAN_NB)
 			return (_sendResponse(ERR_SERVERFULL_CHAN(cli->GetNickName()), fd), false);
 		serv->AddChannel(chan);
 	}
 	else
 	{
-		chan = serv->GetAllChans()[serv->GetChan(chanName)];
-		if (chan.GetInvitOnly())
+		chan = serv->GetChan(chanName);
+		if (chan->GetInvitOnly())
 		{
 			if (!cli->GetInviteChannel(chanName))
 				return (_sendResponse(ERR_INVITEONLYCHAN(cli->GetNickName(), chanName), fd), false);
 		}
-		if (chan.GetClientsNumber() == chan.GetLimit())
+		if (chan->GetClientsNumber() == chan->GetLimit())
 			return (_sendResponse(ERR_CHANNELISFULL(cli->GetNickName(), chanName), fd), false);
-		if (!chan.GetPassword().empty() && chan.GetPassword() != chanPw)
+		if (!chan->GetPassword().empty() && chan->GetPassword() != chanPw)
 			return (_sendResponse(ERR_INCORPASS(cli->GetNickName()), fd), false);
-		if (chan.get_client(fd))
+		if (chan->get_client(fd))
 			return (_sendResponse(ERR_USERONCHANNEL(cli->GetNickName(), chanName), fd), false);
 	}
 	return (true);
@@ -96,12 +99,12 @@ void	Server::join_cmd(int fd, std::string cmd)
 		return ;
 	for (std::map<std::string, std::string>::iterator it = chanName_pw.begin(); it != chanName_pw.end(); it++)
 	{
-		Channel chan = GetAllChans()[GetChan(it->first)];
-		chan.add_client(cli);
-		chan.sendToAll(RPL_JOIN(cli->GetNickName(), it->first));
-		if (!chan.GetTopicName().empty())
-			_sendResponse(RPL_TOPIC(cli->GetNickName(), it->first, chan.GetTopicName()), fd);
-		_sendResponse(RPL_NAMREPLY(cli->GetNickName(), it->first, chan.GetClientList()), fd);
+		Channel *chan = this->GetChan(it->first);
+		chan->add_client(cli);
+		chan->sendToAll(RPL_JOIN(cli->GetNickName(), it->first));
+		if (!chan->GetTopicName().empty())
+			_sendResponse(RPL_TOPIC(cli->GetNickName(), it->first, chan->GetTopicName()), fd);
+		_sendResponse(RPL_NAMREPLY(cli->GetNickName(), it->first, chan->GetClientList()), fd);
 		_sendResponse(RPL_ENDOFNAMES(cli->GetNickName(), it->first), fd);
 	}
 }

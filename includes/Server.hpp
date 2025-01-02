@@ -12,7 +12,7 @@ class Server
 		static bool Signal;
 		std::string password;
 		std::vector<Client*> clients;
-		std::vector<Channel> channels;
+		std::vector<Channel*> channels;
 		std::vector<struct pollfd> fds;
 		struct sockaddr_in add;
 		struct sockaddr_in cliadd;
@@ -30,15 +30,15 @@ class Server
 		std::string GetPassword(void);
 		Client	*GetClient(int fd);
 		Client	*GetClient(std::string nickname);
-		size_t	GetChan(std::string chanName);
-		std::vector<Channel>	GetAllChans(void);
-
+		size_t	GetChanID(std::string chanName);
+		Channel	*GetChan(std::string chanName);
+		std::vector<Channel*>	GetAllChans(void);
 		/* ******************** Setters ******************** */
 		void	SetFd(int server_fdsocket);
 		void	SetPort(int port);
 		void	SetPassword(std::string password);
 		void	AddClient(Client *newClient);
-		void	AddChannel(Channel newChannel);
+		void	AddChannel(Channel *newChannel);
 		void	AddFds(pollfd newFd);
 		void	set_sever_socket(void);
 
@@ -72,9 +72,6 @@ class Server
 		void	topic_cmd(int fd, std::string cmd);
 		void	mode_cmd(int fd, std::string cmd);
 		void	join_cmd(int fd, std::string cmd);
-
-		/* ******************** Display Methods ******************** */
-		void	ft_display(void);
 };
 
 #endif

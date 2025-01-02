@@ -10,6 +10,8 @@ Server::~Server()
 {
 	for(size_t i = 0; i < clients.size(); i++)
 		delete clients[i];
+	for(size_t i = 0; i < channels.size(); i++)
+		delete channels[i];
 	if (server_fdsocket != -1)
 	{
 		std::cout << RED << "Server <" << server_fdsocket << "> Disconnected" << WHI << std::endl;
