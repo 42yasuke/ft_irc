@@ -53,6 +53,8 @@
 
 #define MAX_MODE_L 100
 
+# define SKIP "-----SKIP THIS ONE-----"
+
 # define PORT_AUTORISAT_MIN 1024
 # define PORT_AUTORISAT_MAX 65535
 

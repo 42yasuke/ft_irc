@@ -23,7 +23,7 @@ bool	isValidChan(int fd, std::string chanName, std::string chanPw)
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		for (size_t i = 0; i < chanPw.size(); i++)
 		{
-			if (!isprint(chanPw[i]))
+			if (!isalnum(chanPw[i]))
 				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		}
 		chan = new Channel();
@@ -80,7 +80,7 @@ bool	isGoodParams(int fd, std::string chanList, std::string chanPw, std::map<std
 	for (std::map<std::string, std::string>::iterator it = chanName_pw.begin(); it != chanName_pw.end(); it++)
 	{
 		if (!isValidChan(fd, it->first, it->second))
-			chanName_pw.erase(it);
+			it->second = SKIP;
 	}
 	return (!chanName_pw.empty());
 }
@@ -99,6 +99,8 @@ void	Server::join_cmd(int fd, std::string cmd)
 		return ;
 	for (std::map<std::string, std::string>::iterator it = chanName_pw.begin(); it != chanName_pw.end(); it++)
 	{
+		if (it->second == SKIP)
+			continue;
 		Channel *chan = this->GetChan(it->first);
 		chan->add_client(cli);
 		chan->sendToAll(RPL_JOIN(cli->GetNickName(), it->first));
