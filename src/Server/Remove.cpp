@@ -12,7 +12,7 @@ void	RmThisFdFromAllChans(int fd, std::string reason)
 		if ((*it)->get_client(fd))
 		{
 			(*it)->rmClient(fd);
-			(*it)->sendToAll(RPL_QUIT(cli->GetNickName(), reason));
+			(*it)->sendToAll(RPL_QUIT(cli->GetNickName(), (*it)->GetName(), reason));
 			if ((*it)->GetClientsNumber() == 0)
 				serv->RemoveChan((*it)->GetName());
 		}

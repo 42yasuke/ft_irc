@@ -116,7 +116,7 @@
 # define ERR_BADPARAM(nickname) (":" + nickname + " :bad parameters given" + BN )
 # define ERR_TOOMANYTARGETS(nickname) (":" + nickname + " :too many targets" + BN )
 # define RPL_PART(nickname, channel, reason) (":" + nickname + " PART #" + channel + " " + reason + BN)
-# define RPL_QUIT(nickname, reason) (":" + nickname + " QUIT :" + reason + BN)
+# define RPL_QUIT(nickname, channel, reason) (":" + nickname + " QUIT #" + channel + " :" + reason + BN)
 # define RPL_MODE(nickname, channel, mode, param) (":" + nickname + " MODE #" + channel + " " + mode + " " + param + BN)
 # define RPL_JOIN(nickname, channel) (":" + nickname + " JOIN #" + channel + BN)
 # define ERR_SERVERFULL_CHAN(nickname) (":" + nickname + " :Server is full, no more channels can be created" + BN)
