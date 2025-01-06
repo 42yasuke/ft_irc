@@ -108,6 +108,8 @@
 # define ERR_INCORPASS(nickname) (": 464 " + nickname + " :Password incorrect !" + BN )
 # define ERR_USERONCHANNEL(nickname, channel) (": 443 " + nickname + " #" + channel + " :is already on channel" + BN)
 # define ERR_TOOMANYCHANNELS(nickname) (": 405 " + nickname + " :You have joined too many channels" + BN)
+# define ERR_CANNOTSENDTOCHAN(nickname, channel) (": 404 " + nickname + " #" + channel + " :Cannot send to channel" + BN)
+# define ERR_NOTEXTTOSEND(nickname) (": 412 " + nickname + " :No text to send" + BN)
 
 /* ******************** Personal Macro ******************** */
 # define RPL_INVITED(nickname, channel) (":" + nickname + " :invite you to #" + channel + BN)
@@ -120,5 +122,6 @@
 # define RPL_MODE(nickname, channel, mode, param) (":" + nickname + " MODE #" + channel + " " + mode + " " + param + BN)
 # define RPL_JOIN(nickname, channel) (":" + nickname + " JOIN #" + channel + BN)
 # define ERR_SERVERFULL_CHAN(nickname) (":" + nickname + " :Server is full, no more channels can be created" + BN)
+# define RPL_PRIVMSG(nickname, dest, msg) (":" + nickname + " PRIVMSG " + dest + " :" + msg + BN)
 
 #endif
