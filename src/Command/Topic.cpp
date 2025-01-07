@@ -28,11 +28,17 @@ void	Server::topic_cmd(int fd, std::string cmd)
 {
 	cmd.erase(0, 5);
 	std::stringstream ss(cmd);
-	std::string chanName, topic, bad_param;
-	ss >> chanName >> topic >> bad_param;
+	std::string chanName, topic;
+	ss >> chanName;
 	Client	*cli = this->GetClient(fd);
-	if (!bad_param.empty())
-		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd));
+	while (!ss.eof())
+	{
+		std::string tmp;
+		ss >> tmp;
+		topic += tmp + " ";
+	}
+	if (!topic.empty())
+		topic.erase(topic.size() - 1);
 	bool	flag = false;
 	if (!isGoodParam(fd, chanName, topic, flag))
 		return ;

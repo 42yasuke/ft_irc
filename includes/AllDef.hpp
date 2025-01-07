@@ -78,7 +78,7 @@
 # define RPL_NICKCHANGE(oldnickname, nickname) (":" + oldnickname + " NICK " + nickname + BN)
 # define RPL_NOTOPIC(nickname, channel) (": 331 " + nickname + " #" + channel + " :No topic is set" + BN)
 # define RPL_TOPIC(nickname, channel, topic) (": 332 " + nickname + " #" +channel + " :" + topic + BN)
-# define RPL_TOPICWHOTIME(nickname, channel, topic, timer) (": 333 " + nickname + " #" + channel + " " + topic + " " + timer + BN)
+# define RPL_TOPICWHOTIME(nickname, channel, topic, timer) (": 333 " + nickname + " #" + channel + " TOPIC " + topic + " " + timer + BN)
 # define RPL_INVITING(nickname, channel) (": 341 " + nickname + " :has been successfuly invited to #" + channel + BN)
 # define RPL_LISTSTART(nickname) (":" + nickname + " 321 :Begin of /LIST" + BN)
 # define RPL_LIST(channel, clientsnumber, topic) ("#" + channel + " " + clientsnumber + " " + topic + BN)
