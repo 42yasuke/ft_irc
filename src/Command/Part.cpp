@@ -6,24 +6,28 @@ bool isGoodParams(int fd, std::string chanList, std::vector<Channel*> &cList, st
 	if (!serv)
 		ft_error("getServ failed");
 	Client *cli = serv->GetClient(fd);
+	if (!reason.empty())
+	{
+		if (reason[0] != ':')
+			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		reason.erase(0, 1);
+		for (size_t i = 0; i < reason.size(); i++)
+		{
+			if (!std::isalnum(reason[i]) && !std::isspace(reason[i]))
+				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
+		}
+	}
 	if (chanList.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-	for (size_t i = 0; i < reason.size(); i++)
-	{
-		if (i == 0 && reason[i] != ':')
-			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-		if (i && (!isalpha(reason[i]) || reason[i] != ' '))
-			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-	}
 	std::string chanName;
 	std::stringstream ss(chanList);
 	while (std::getline(ss, chanName, ','))
 	{
 		if (chanName[0] != '#')
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
-		if (serv->GetChanID(chanName) == INT_MAX)
-			{_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName), fd); continue;};
-		cList.push_back(serv->GetChan(chanName));
+		if (serv->GetChanID(chanName.substr(1)) == INT_MAX)
+			{_sendResponse(ERR_NOSUCHCHANNEL(cli->GetNickName(), chanName.substr(1)), fd); continue;};
+		cList.push_back(serv->GetChan(chanName.substr(1)));
 	}
 	return (cList.size() > 0);
 }
@@ -35,9 +39,14 @@ void	Server::part_cmd(int fd, std::string cmd)
 	std::vector<Channel*> cList;
 	std::stringstream ss(cmd);
 	ss >> chanList;
-	std::getline(ss, reason);
-	while (!reason.empty() && reason[0] == ' ')
-		reason = reason.substr(1);
+	while (!ss.eof())
+	{
+		std::string tmp;
+		ss >> tmp;
+		reason += tmp + " ";
+	}
+	if (!reason.empty())
+		reason.erase(reason.size() - 1);
 	if (!isGoodParams(fd, chanList, cList, reason))
 		return ;
 	Client	*cli = GetClient(fd);
