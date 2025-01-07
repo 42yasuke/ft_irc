@@ -51,7 +51,7 @@
 # define MODE_O 3
 # define MODE_L 4
 
-#define MAX_MODE_L 100
+#define MAX_MODE_L 5
 
 # define SKIP "-----SKIP THIS ONE-----"
 

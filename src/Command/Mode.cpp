@@ -49,7 +49,7 @@ bool	isValidMode(int fd, std::string &modeStr, std::string &param, Channel *chan
 	}
 	if (modeStr[1] == 'k')
 	{
-		if (param.empty())
+		if (param.empty() && modeStr[0] == '+')
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		for (size_t i = 0; i < param.size(); i++)
 		{
@@ -123,7 +123,10 @@ void	mod_o(Channel *chan, int flag, std::string param)
 	(void)param;
 	Client	*cli = chan->get_client(param);
 	if (flag)
-		chan->add_admin(cli);
+	{
+		if (!chan->get_admin(cli->GetFd()))
+			chan->add_admin(cli);
+	}
 	else
 		chan->rmAdmin(cli->GetFd());
 }

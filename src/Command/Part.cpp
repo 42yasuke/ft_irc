@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-bool isGoodParams(int fd, std::string chanList, std::vector<Channel*> &cList, std::string reason)
+bool isGoodParams(int fd, std::string chanList, std::vector<Channel*> &cList, std::string &reason)
 {
 	Server *serv = (Server*)getServ(NULL);
 	if (!serv)
