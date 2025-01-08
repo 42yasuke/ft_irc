@@ -123,5 +123,6 @@
 # define RPL_JOIN(nickname, channel) (":" + nickname + " JOIN #" + channel + BN)
 # define ERR_SERVERFULL_CHAN(nickname) (":" + nickname + " :Server is full, no more channels can be created" + BN)
 # define RPL_PRIVMSG(nickname, dest, msg) (":" + nickname + " PRIVMSG " + dest + " :" + msg + BN)
+# define RPL_KICK(nickname, channel, target, reason) (":" + nickname + " KICK #" + channel + " " + target + " :" + reason + BN)
 
 #endif
