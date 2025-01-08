@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-bool	isValidNickAndChan(int fd, std::string nickName, std::string chanName)
+bool	isValidNickAndChan(int fd, std::string nickName, std::string &chanName)
 {
 	Server	*serv = (Server*)getServ(NULL);
 	if (!serv)
@@ -27,17 +27,18 @@ bool	isValidNickAndChan(int fd, std::string nickName, std::string chanName)
 void	Server::invite_cmd(int fd, std::string cmd)
 {
 	cmd = cmd.substr(6);
-	std::string nickName, chanName;
+	std::string nickName, chanName, badparam;
 	std::stringstream ss(cmd);
 	ss >> nickName;
 	ss >> chanName;
+	ss >> badparam;
 	Client	*cli = GetClient(fd);
-	if (ss)
+	if (!badparam.empty())
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd));
 	if (!isValidNickAndChan(fd, nickName, chanName))
 		return ;
 	Client	*cli2 = GetClient(nickName);
 	cli2->AddChannelInvite(chanName);
 	_sendResponse(RPL_INVITING(nickName, chanName), fd);
-	_sendResponse(RPL_INVITING(cli->GetNickName(), chanName), cli2->GetFd());
+	_sendResponse(RPL_INVITED(cli->GetNickName(), chanName), cli2->GetFd());
 }
