@@ -42,7 +42,7 @@ void Client::SetUsername(std::string &username) { this->username = username; }
 
 void Client::setBuffer(std::string recived)
 {
-	if (recived.size())
+	if (!recived.empty())
 		buffer += recived;
 	else
 		buffer.clear();
