@@ -21,7 +21,14 @@ bool	isPortValid(std::string port)
 
 bool	isPasswordValid(std::string pw)
 {
-	return (!(pw.empty() || pw.size() > 10));
+	if (pw.empty() || pw.size() > 10)
+		return (false);
+	for (size_t i = 0; i < pw.size(); i++)
+	{
+		if (!isalnum(pw[i]))
+			return (false);
+	}
+	return (true);
 }
 
 void	ft_error(std::string msg)

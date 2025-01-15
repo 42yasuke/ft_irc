@@ -4,6 +4,9 @@ bool Server::Signal = false;
 
 Server::Server()
 {
+	this->port = 0;
+	this->server_fdsocket = -1;
+	this->password = "";
 }
 
 Server::~Server()
