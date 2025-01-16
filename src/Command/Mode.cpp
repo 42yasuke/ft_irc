@@ -37,14 +37,14 @@ bool	isValidMode(int fd, std::string &modeStr, std::string &param, Channel *chan
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	if (modeStr[1] == 'l')
 	{
-		if (param.empty() || param.size() > 3)
+		if ((param.empty() && modeStr[0] == '+') || param.size() > 3)
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		for (size_t i = 0; i < param.size(); i++)
 		{
 			if (!isdigit(param[i]))
 				return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 		}
-		if (atoi(param.c_str()) < chan->GetClientsNumber()|| atoi(param.c_str()) > MAX_MODE_L)
+		if (param.size() && (atoi(param.c_str()) < chan->GetClientsNumber() || atoi(param.c_str()) > MAX_MODE_L))
 			return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	}
 	if (modeStr[1] == 'k')

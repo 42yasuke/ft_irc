@@ -48,7 +48,7 @@ void Client::AddChannelInvite(std::string &chname)
 	ChannelsInvite.push_back(chname);
 }
 
-void Client::RmChannelInvite(std::string &chname)
+void Client::RmChannelInvite(const std::string &chname)
 {
 	for (size_t i = 0; i < this->ChannelsInvite.size(); i++)
 	{

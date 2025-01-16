@@ -103,6 +103,7 @@ void	Server::join_cmd(int fd, std::string cmd)
 			continue;
 		Channel *chan = this->GetChan(it->first);
 		chan->add_client(cli);
+		cli->RmChannelInvite(it->first);
 		chan->sendToAll(RPL_JOIN(cli->GetNickName(), it->first));
 		if (!chan->GetTopicName().empty())
 			_sendResponse(RPL_TOPIC(cli->GetNickName(), it->first, chan->GetTopicName()), fd);

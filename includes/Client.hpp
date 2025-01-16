@@ -44,7 +44,7 @@ class Client
 
 		/* ******************** Methods ******************** */
 		void AddChannelInvite(std::string &chname);
-		void RmChannelInvite(std::string &chname);
+		void RmChannelInvite(const std::string &chanName);
 };
 
 #endif
