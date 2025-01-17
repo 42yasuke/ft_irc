@@ -41,8 +41,9 @@
 # define INVITE 9
 # define PRIVMSG 10
 # define LIST 11
-# define CMDNOTFOUND 12
-# define NOTREGISTERED 13
+# define SEND 12
+# define CMDNOTFOUND 13
+# define NOTREGISTERED 14
 
 /* ******************** Mode Macro ******************** */
 # define MODE_I 0

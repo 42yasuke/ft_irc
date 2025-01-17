@@ -56,6 +56,8 @@ int	get_cmd_type(std::string &cmd, bool registered)
 		return (PRIVMSG);
 	if (token == "list")
 		return (LIST);
+	if (token == "send")
+		return (SEND);
 	return (CMDNOTFOUND);
 }
 
@@ -100,7 +102,8 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::part_cmd,
 			&Server::invite_cmd,
 			&Server::privmsg_cmd,
-			&Server::list_cmd
+			&Server::list_cmd,
+			&Server::send_cmd
 		};
 		(this->*ptr_cmd[cmd_type])(fd, cmd);
 	}

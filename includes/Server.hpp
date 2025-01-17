@@ -72,6 +72,7 @@ class Server
 		void	topic_cmd(int fd, std::string cmd);
 		void	mode_cmd(int fd, std::string cmd);
 		void	join_cmd(int fd, std::string cmd);
+		void	send_cmd(int fd, std::string cmd);
 };
 
 #endif
