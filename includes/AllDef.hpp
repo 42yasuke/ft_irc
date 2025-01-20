@@ -41,7 +41,7 @@
 # define INVITE 9
 # define PRIVMSG 10
 # define LIST 11
-# define SEND 12
+# define DCCSEND 12
 # define CMDNOTFOUND 13
 # define NOTREGISTERED 14
 
@@ -56,8 +56,11 @@
 
 # define SKIP "-----SKIP THIS ONE-----"
 
+#define RPA_MIN 65500 // random port autorisated min
+#define RPA_MAX 65535 // random port autorisated max
+
 # define PORT_AUTORISAT_MIN 1024
-# define PORT_AUTORISAT_MAX 65535
+# define PORT_AUTORISAT_MAX 65499
 
 # define MAX_CHAR 9
 # define MAX_CHAR_TRONC 20
@@ -67,7 +70,9 @@
 # define MAX_JOIN_CHAN_AT_ONCE 3
 # define MAX_CHAN_NB 10
 
-# define BN "\n"
+# define JOKES_PATH "/src/Command/Bot/.jokes"
+
+# define BN "\r\n"
 # define SP " "
 
 /* ******************** RPL Macro ******************** */
@@ -125,5 +130,10 @@
 # define ERR_SERVERFULL_CHAN(nickname) (":" + nickname + " :Server is full, no more channels can be created" + BN)
 # define RPL_PRIVMSG(nickname, dest, msg) (":" + nickname + " PRIVMSG " + dest + " :" + msg + BN)
 # define RPL_KICK(nickname, channel, target, reason) (":" + nickname + " KICK #" + channel + " " + target + " :" + reason + BN)
+# define ERR_FILENOTFOUND(filename) (":" + filename + " :File not found" + BN)
+# define ERR_CANNOTOPENFILE(filename) (":" + filename + " :Cannot open file" + BN)
+# define RPL_WAITINGCONNECTION(nickname, port) (":" + nickname + " :Waiting for connection on port " + port + BN)
+# define RPL_INVITECONNECTION(nickname, port) (":" + nickname + " :Invite you to connect on port " + port + BN)
+# define RPL_ACCEPTEDCONNECTION(nickname, port) (":" + nickname + " :Accepted connection on port " + port + BN)
 
 #endif

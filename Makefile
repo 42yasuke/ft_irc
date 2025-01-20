@@ -11,16 +11,12 @@ CPP_FILES =	main.cpp \
 			Server/Server.cpp Server/Parse.cpp Server/GettersSetters.cpp Server/Remove.cpp \
 			Command/Pass.cpp Command/Nick.cpp Command/User.cpp Command/Privmsg.cpp Command/Invite.cpp Command/Kick.cpp \
 			Command/Part.cpp Command/Quit.cpp Command/List.cpp Command/Topic.cpp Command/Mode.cpp Command/Join.cpp \
+			Command/Bot/Bot.cpp Command/Bot/RPN.cpp \
 			Client/Client.cpp Client/GettersSetters.cpp \
 			Channel/Channel.cpp Channel/GettersSetters.cpp Channel/SendToAll.cpp
 
-CPP_FILES_BONUS =	Command/Send.cpp
-
 OBJ = $(CPP_FILES:.cpp=.o)
 DEP = $(CPP_FILES:.cpp=.d)
-
-OBJ_BONUS = $(CPP_FILES_BONUS:.cpp=.o)
-DEP_BONUS = $(CPP_FILES_BONUS:.cpp=.d)
 
 SRC = src/
 BUILD = build/
@@ -28,19 +24,21 @@ BUILD_FOLDER =	build/Utils/ \
 				build/Server/ \
 				build/Command \
 				build/Client/ \
-				build/Channel/
+				build/Channel/ \
+				build/Bot/
 
 OBJ := $(addprefix $(BUILD), $(OBJ))
 DEP := $(addprefix $(BUILD), $(DEP))
-
-OBJ_BONUS := $(addprefix $(BUILD), $(OBJ_BONUS))
-DEP_BONUS := $(addprefix $(BUILD), $(DEP_BONUS))
 
 NAME = ircserv
 
 all : .mandatory
 
 bonus : .bonus
+
+.mandatory : $(NAME)
+			@rm -f .bonus
+			@touch .mandatory
 
 $(BUILD) :
 			mkdir -p $(BUILD)
@@ -49,25 +47,22 @@ $(BUILD) :
 $(BUILD)%.o : $(SRC)%.cpp | $(BUILD)
 			$(CPP) $(CPP_FLAGS) $(INC) $< -o $@
 
-.mandatory : $(OBJ)
+$(NAME) : $(OBJ)
 			$(CPP) $(OBJ) -o $(NAME)
-			@touch .mandatory
-			@rm -f .bonus
 
-.bonus : $(OBJ) $(OBJ_BONUS)
-			$(CPP) $(OBJ) $(OBJ_BONUS) -o $(NAME)
-			@touch .bonus
+.bonus : $(NAME)
 			@rm -f .mandatory
+			@touch .bonus
 
 clean :
 		$(RM) $(OBJ) $(DEP)
 		$(RM) -r $(BUILD)
 
 fclean : clean
-		$(RM) $(NAME)
+		$(RM) $(NAME) .bonus .mandatory
 
 re : fclean all
 
 .PHONY : all fclean clean re bonus
 
--include $(DEP) $(DEP_BONUS)
+-include $(DEP)

@@ -6,7 +6,12 @@ std::vector<std::string> Server::splitByLine(std::string str)
 	std::istringstream stm(str);
 	std::string line;
 	while (std::getline(stm, line))
+	{
+		size_t found = line.find_first_of("\r");
+		if (found != std::string::npos)
+			line.erase(found, 1);
 		vec.push_back(line);
+	}
 	return (vec);
 }
 
@@ -56,8 +61,12 @@ int	get_cmd_type(std::string &cmd, bool registered)
 		return (PRIVMSG);
 	if (token == "list")
 		return (LIST);
-	if (token == "send")
-		return (SEND);
+	if (token == "dcc")
+	{
+		stm >> token;
+		if (token == "send")
+			return (DCCSEND);
+	}
 	return (CMDNOTFOUND);
 }
 
@@ -103,7 +112,7 @@ void	Server::parse_exec_cmd(std::string &cmd, int fd)
 			&Server::invite_cmd,
 			&Server::privmsg_cmd,
 			&Server::list_cmd,
-			&Server::send_cmd
+			&Server::bot_cmd
 		};
 		(this->*ptr_cmd[cmd_type])(fd, cmd);
 	}

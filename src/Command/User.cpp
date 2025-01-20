@@ -37,7 +37,7 @@ bool	isGoodParams(int fd, std::string userName, std::string hostName, std::strin
 	Client *cli = serv->GetClient(fd);
 	if (userName.empty() || realName.empty() || hostName.empty() || serverName.empty())
 		return (_sendResponse(ERR_NEEDMOREPARAMS(cli->GetNickName()), fd), false);
-	if (!onlyAlphanum(userName) || hostName != "0" || serverName != "*")
+	if (!onlyAlphanum(userName))
 		return (_sendResponse(ERR_BADPARAM(cli->GetNickName()), fd), false);
 	if(!cli->getRegistered())
 		return (_sendResponse(ERR_NOTREGISTERED(std::string("")), fd), false);
