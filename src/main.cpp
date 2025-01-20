@@ -2,15 +2,15 @@
 
 int main(int ac, char** av)
 {
-	Server *server = new Server();
-	if (!server)
-		ft_error("new Server() failled!!!");
-	getServ(server);
 	if (ac != 3)
 	{
-		std::cout << "Usage: " << av[0] << " <port number> <password>" << std::endl; 
+		std::cout << "Usage: " << av[0] << " <port number> <password>" << std::endl;
 		return 1;
 	}
+	Server *server = new Server();
+	if (!server)
+		ft_error("new Server() failled!!!");		
+	getServ(server);
 	std::cout << "---- SERVER ----" << std::endl;
 	try
 	{

@@ -17,6 +17,7 @@ class Server
 		struct sockaddr_in add;
 		struct sockaddr_in cliadd;
 		struct pollfd new_cli;
+		std::vector<std::string> draw;
 
 	public:
 		Server();
@@ -33,6 +34,8 @@ class Server
 		size_t	GetChanID(std::string chanName);
 		Channel	*GetChan(std::string chanName);
 		std::vector<Channel*>	GetAllChans(void);
+		std::string	getDrawPath(size_t i);
+
 		/* ******************** Setters ******************** */
 		void	SetFd(int server_fdsocket);
 		void	SetPort(int port);

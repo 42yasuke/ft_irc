@@ -51,6 +51,13 @@ Channel	*Server::GetChan(std::string chanName)
 
 std::vector<Channel*>	Server::GetAllChans(void) { return this->channels;}
 
+std::string	Server::getDrawPath(size_t i)
+{
+	if (i >= this->draw.size())
+		ft_error("getDrawPath bad parameeters given");
+	return (this->draw[i]);
+}
+
 /* ******************** Setters ******************** */
 void Server::SetFd(int fd) { this->server_fdsocket = fd; }
 

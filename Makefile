@@ -11,7 +11,7 @@ CPP_FILES =	main.cpp \
 			Server/Server.cpp Server/Parse.cpp Server/GettersSetters.cpp Server/Remove.cpp \
 			Command/Pass.cpp Command/Nick.cpp Command/User.cpp Command/Privmsg.cpp Command/Invite.cpp Command/Kick.cpp \
 			Command/Part.cpp Command/Quit.cpp Command/List.cpp Command/Topic.cpp Command/Mode.cpp Command/Join.cpp \
-			Command/Bot/Bot.cpp Command/Bot/RPN.cpp \
+			Command/Bot/Bot.cpp \
 			Client/Client.cpp Client/GettersSetters.cpp \
 			Channel/Channel.cpp Channel/GettersSetters.cpp Channel/SendToAll.cpp
 
@@ -22,10 +22,10 @@ SRC = src/
 BUILD = build/
 BUILD_FOLDER =	build/Utils/ \
 				build/Server/ \
-				build/Command \
+				build/Command/ \
 				build/Client/ \
 				build/Channel/ \
-				build/Bot/
+				build/Command/Bot/
 
 OBJ := $(addprefix $(BUILD), $(OBJ))
 DEP := $(addprefix $(BUILD), $(DEP))

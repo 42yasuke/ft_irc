@@ -86,7 +86,8 @@ bool	isGoodParam(int fd, std::string &chanName, std::string &modeStr, std::strin
 int		giveMode(const std::string &modeStr)
 {
 	int mode;
-	switch(modeStr[1]) {
+	switch(modeStr[1])
+	{
 		case 'i': mode = MODE_I; break;
 		case 't': mode = MODE_T; break;
 		case 'k': mode = MODE_K; break;

@@ -61,12 +61,8 @@ int	get_cmd_type(std::string &cmd, bool registered)
 		return (PRIVMSG);
 	if (token == "list")
 		return (LIST);
-	if (token == "dcc")
-	{
-		stm >> token;
-		if (token == "send")
-			return (DCCSEND);
-	}
+	if (token == "bot")
+		return (BOT);
 	return (CMDNOTFOUND);
 }
 

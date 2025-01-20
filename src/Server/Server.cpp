@@ -36,6 +36,7 @@ Server &Server::operator=(Server const &src)
 		this->clients = src.clients;
 		this->channels = src.channels;
 		this->fds = src.fds;
+		this->draw = src.draw;
 	}
 	return *this;
 }
@@ -54,6 +55,40 @@ void Server::startServer(int port, std::string pass)
 	this->password = pass;
 	this->port = port;
 	this->set_sever_socket();
+
+	std::ifstream file (".bonus");
+	if (file.good())
+	{
+		file.close();
+		file.open(JOKES_PATH);
+		if (!file.is_open())
+			ft_error("canot open file .jokes");
+		file.close();
+		file.open(CAT_PATH);
+		if (!file.is_open())
+			ft_error("canot open file .cat");
+		file.close();
+		file.open(CAR_PATH);
+		if (!file.is_open())
+			ft_error("canot open file .car");
+		file.close();
+		file.open(FACE_PATH);
+		if (!file.is_open())
+			ft_error("canot open file .face");
+		file.close();
+		file.open(RABBIT_PATH);
+		if (!file.is_open())
+			ft_error("canot open file .rabbit");
+		file.close();
+		file.open(BIKE_PATH);
+		if (!file.is_open())
+			ft_error("canot open file .bike");
+		this->draw.push_back(CAT_PATH);
+		this->draw.push_back(CAR_PATH);
+		this->draw.push_back(RABBIT_PATH);
+		this->draw.push_back(FACE_PATH);
+		this->draw.push_back(BIKE_PATH);
+	}
 
 	std::cout << GRE << "Server <" << server_fdsocket << "> Connected" << WHI << std::endl;
 	std::cout << "Waiting to accept a connection...\n";

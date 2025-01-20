@@ -21,6 +21,7 @@
 # include <vector>
 # include <map>
 # include <string>
+# include <stack>
 
 /* ******************** Colors Macro ******************** */
 # define RED "\e[1;31m"
@@ -41,7 +42,7 @@
 # define INVITE 9
 # define PRIVMSG 10
 # define LIST 11
-# define DCCSEND 12
+# define BOT 12
 # define CMDNOTFOUND 13
 # define NOTREGISTERED 14
 
@@ -70,7 +71,13 @@
 # define MAX_JOIN_CHAN_AT_ONCE 3
 # define MAX_CHAN_NB 10
 
-# define JOKES_PATH "/src/Command/Bot/.jokes"
+# define JOKES_PATH "src/Command/Bot/.jokes"
+# define CAT_PATH "src/Command/Bot/.cat"
+# define CAR_PATH "src/Command/Bot/.car"
+# define RABBIT_PATH "src/Command/Bot/.rabbit"
+# define FACE_PATH "src/Command/Bot/.face"
+# define BIKE_PATH "src/Command/Bot/.bike"
+
 
 # define BN "\r\n"
 # define SP " "
@@ -135,5 +142,7 @@
 # define RPL_WAITINGCONNECTION(nickname, port) (":" + nickname + " :Waiting for connection on port " + port + BN)
 # define RPL_INVITECONNECTION(nickname, port) (":" + nickname + " :Invite you to connect on port " + port + BN)
 # define RPL_ACCEPTEDCONNECTION(nickname, port) (":" + nickname + " :Accepted connection on port " + port + BN)
+# define ERR_WRONGOPERATIONGIVEN(nickname, operator) (": " + nickname + " : " + operator + " : bad operator given" + BN)
+# define ERR_DIVZERO(nickname) (": " + nickname + " : Division by zero is forbidden" + BN)
 
 #endif
